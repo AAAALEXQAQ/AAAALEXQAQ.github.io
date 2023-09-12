@@ -372,17 +372,17 @@
 <li>Accept<br> ·如果达到了多数派，proposer会发出accept请求，此请求包含提案编号N，以及内容- </li>
 <li>Accepted<br>·如果此acceptor在此期间没有收到任何大于N的提案，则接收此提案内容，否则忽略。</li>
 </ul>
-<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689864903598.png" alt="1689864903598" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865045664.png" alt="1689865045664" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865178097.png" alt="1689865178097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/07/21/paxos&raft%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/Users\HP\AppData\Roaming\Typora\typora-user-images\1689864903598.png" alt="1689864903598" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/07/21/paxos&raft%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/Users\HP\AppData\Roaming\Typora\typora-user-images\1689865045664.png" alt="1689865045664" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/07/21/paxos&raft%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/Users\HP\AppData\Roaming\Typora\typora-user-images\1689865178097.png" alt="1689865178097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>潜在问题：活锁</p>
-<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865727916.png" alt="1689865727916" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/07/21/paxos&raft%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/Users\HP\AppData\Roaming\Typora\typora-user-images\1689865727916.png" alt="1689865727916" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>解决方法： 加随机等待时间</p>
-<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865419305.png" alt="1689865419305" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/07/21/paxos&raft%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/Users\HP\AppData\Roaming\Typora\typora-user-images\1689865419305.png" alt="1689865419305" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>缺点：实现难，效率低（2轮RPC） （第一轮，希望多数人通过；第二轮，希望把方案落地执行执行）</p>
 <h3 id="2-3multi-Paxos"><a href="#2-3multi-Paxos" class="headerlink" title="2.3multi-Paxos"></a>2.3multi-Paxos</h3><p>只需要在第一次执行两轮</p>
 <p>第二次既以后执行一轮 添加了Following —— 话事人（<strong>可以决定的人</strong>）</p>
-<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865628403.png" alt="1689865628403" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/07/21/paxos&raft%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/Users\HP\AppData\Roaming\Typora\typora-user-images\1689865628403.png" alt="1689865628403" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <h2 id="3-raft算法原理"><a href="#3-raft算法原理" class="headerlink" title="3.raft算法原理"></a>3.raft算法原理</h2><p><a target="_blank" rel="noopener" href="http://www.kailing.pub/raft/index.html">http://www.kailing.pub/raft/index.html</a><br>容易理解的Distributed Consensus分布式共识算法ww.kailing.pub&#x2F;raft&#x2F;index.html</p>
 
 </article>
