@@ -7,16 +7,28 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta property="og:type" content="website">
-<meta property="og:title" content="alex">
-<meta property="og:url" content="https://aaaalexqaq.github.io/archives/2023/index.html">
+<meta name="description" content="paxos&amp;raft算法原理1.拜占庭将军问题​     拜占庭将军问题是一个协议问题，拜占庭帝国军队的将军们必须全体一致的决定是否攻击某一支敌军。问题是这些将军在地理上是分隔开来的，并且将军中存在叛徒。叛徒可以任意行动以达到以下目标：欺骗某些将军采取进攻行动；促成一个不是所有将军都同意的决定，如当将军们不希望进攻时促成进攻行动；或者迷惑某些将军，使他们无法做出决定。如果叛徒达到了这些目的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paxos&amp;raft算法原理">
+<meta property="og:url" content="https://aaaalexqaq.github.io/2023/07/21/paxos&raft%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="alex">
+<meta property="og:description" content="paxos&amp;raft算法原理1.拜占庭将军问题​     拜占庭将军问题是一个协议问题，拜占庭帝国军队的将军们必须全体一致的决定是否攻击某一支敌军。问题是这些将军在地理上是分隔开来的，并且将军中存在叛徒。叛徒可以任意行动以达到以下目标：欺骗某些将军采取进攻行动；促成一个不是所有将军都同意的决定，如当将军们不希望进攻时促成进攻行动；或者迷惑某些将军，使他们无法做出决定。如果叛徒达到了这些目的">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="article:published_time" content="2023-07-21T06:10:32.000Z">
+<meta property="article:modified_time" content="2023-09-12T12:04:40.541Z">
 <meta property="article:author" content="Alex">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://aaaalexqaq.github.io/img/404.jpg">
 
 
-<title >alex</title>
+<title >paxos&raft算法原理</title>
 
 <!-- Favicon -->
 
@@ -58,7 +70,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"aaaalexqaq.github.io","author":"Alex","root":"/","typed_text":null,"theme_version":"2.0.9","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","appleTouchIcon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","showText":"(/≧▽≦/)Hey! Good again!","hideText":"(●—●)Oh, crash!"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":false,"isHome":false,"postUpdate":"2023-09-12 20:05:48"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-09-12 20:04:40"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.9" id="trm-switch-style">
@@ -185,7 +197,8 @@
             <!-- top bar end -->
 
             <!-- body -->
-            <div class="trm-content-start">
+            
+<div class="trm-content-start">
     <!-- banner -->
     <div class="trm-banner" data-scroll data-scroll-direction="vertical">
     
@@ -206,10 +219,10 @@
                     <!-- banner title -->
                     <div class="trm-banner-text ">
                         <div class="trm-label trm-mb-20">
-                            The article archive
+                            NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            云间连下榻，<br>天上接行杯。
+                            paxos&raft算法原理
                         </h1>
 
                         
@@ -219,7 +232,7 @@
                                 </li>
                                 <li>
                                     <span>
-                                        archives
+                                        2023
                                     </span
                                 ></li>
                             </ul>
@@ -311,125 +324,147 @@
                 <div class="trm-content" id="trm-content">
                     <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
 
-                    <div class="row">
-    <div class="col-lg-12">
-        <div class="trm-card">
-            <div style="padding: 0 20px;">
-                
-                    <ul class="row trm-list" style="margin-bottom: 0px;"><li class="col-lg-4 trm-list-item" style="margin: 6px 0;"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">（3）</span></li><li class="col-lg-4 trm-list-item" style="margin: 6px 0;"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">（2）</span></li></ul>
-                
-            </div>
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            07/21
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            14:10
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Alex
         </div>
     </div>
 </div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="paxos-raft算法原理"><a href="#paxos-raft算法原理" class="headerlink" title="paxos&amp;raft算法原理"></a>paxos&amp;raft算法原理</h1><h2 id="1-拜占庭将军问题"><a href="#1-拜占庭将军问题" class="headerlink" title="1.拜占庭将军问题"></a>1.拜占庭将军问题</h2><p>​     拜占庭将军问题是一个协议问题，拜占庭帝国军队的将军们必须全体一致的决定是否攻击某一支敌军。问题是这些将军在地理上是分隔开来的，并且将军中存在叛徒。叛徒可以任意行动以达到以下目标：<strong>欺骗某些将军采取进攻行动</strong>；<strong>促成一个不是所有将军都同意的决定，如当将军们不希望进攻时促成进攻行动</strong>；<strong>或者迷惑某些将军，使他们无法做出决定</strong>。如果叛徒达到了这些目的之一，则任何攻击行动的结果都是注定要失败的，只有完全达成一致的努力才能获得胜利。</p>
+<p><img src="https://img2023.cnblogs.com/blog/1358881/202302/1358881-20230202105853432-1223528127.png" alt="image-20230202105851498" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="2-Paxos算法"><a href="#2-Paxos算法" class="headerlink" title="2.Paxos算法"></a>2.Paxos算法</h2><h3 id="2-1背景"><a href="#2-1背景" class="headerlink" title="2.1背景"></a>2.1背景</h3><p>解决什么问题</p>
+<p><strong>Paxos算法：</strong>一种基于消息传递且具有高度容错特性的<strong>一致性算法</strong>。</p>
+<p><strong>Paxos算法解决的问题：</strong>就是如何快速正确的在一个分布式系统中对某个数据值达成一致，并且保证不论发生任何异常，都不会破坏整个系统的一致性。</p>
+<p>背景：</p>
+<p>Paxos算法是Lamport宗师提出的一种基于消息传递的分布式一致性算法，使其获得2013年图灵奖。</p>
+<p>Paxos由Lamport于1998年在《The Part-Time Parliament》论文中首次公开，最初的描述使用希腊的一个小岛Paxos作为比喻，描述了Paxos小岛中通过决议的流程，并以此命名这个算法，但是这个描述理解起来比较有挑战性。后来在2001年，Lamport觉得同行不能理解他的幽默感，于是重新发表了朴实的算法描述版本《Paxos Made Simple》。</p>
+<p>自Paxos问世以来就持续垄断了分布式一致性算法，Paxos这个名词几乎等同于分布式一致性。Google的很多大型分布式系统都采用了Paxos算法来解决分布式一致性问题，如Chubby、Megastore以及Spanner等。开源的ZooKeeper，以及MySQL 5.7推出的用来取代传统的主从复制的MySQL Group Replication等纷纷采用Paxos算法解决分布式一致性问题。</p>
+<h3 id="2-2Basic-Paxos"><a href="#2-2Basic-Paxos" class="headerlink" title="2.2Basic-Paxos"></a>2.2Basic-Paxos</h3><p>角色介绍</p>
+<pre><code> **Client**
+</code></pre>
+<p>​		请求发起者，系统外部角色（用户）</p>
+<p>​	<strong>Proposer</strong></p>
+<p>​		接受client请求，向集群提出提议。起到冲突调节的作用</p>
+<p>​	<strong>Acceptor</strong> </p>
+<p>​		提议投票和接收者，只有在行程法定人数（Quorum）（多数派）时，提议才会最终被接受。</p>
+<p>​	<strong>Learner</strong> </p>
+<p>​		提议接收者，备份，对集群一致性没有影响（不参与投票）</p>
+<p>·步骤和阶段</p>
+<ul>
+<li>Prepare<br>· Proposer提出一个提案，编号为N，此N大于这个Proposer之前提出提案编号。请求Acceptors 的quorum接收。</li>
+<li>Promise<br>·如果N大于此Acceptor之前接收的任何提案编号则接受，否则拒绝</li>
+<li>Accept<br> ·如果达到了多数派，proposer会发出accept请求，此请求包含提案编号N，以及内容- </li>
+<li>Accepted<br>·如果此acceptor在此期间没有收到任何大于N的提案，则接收此提案内容，否则忽略。</li>
+</ul>
+<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689864903598.png" alt="1689864903598" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865045664.png" alt="1689865045664" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865178097.png" alt="1689865178097" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>潜在问题：活锁</p>
+<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865727916.png" alt="1689865727916" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>解决方法： 加随机等待时间</p>
+<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865419305.png" alt="1689865419305" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>缺点：实现难，效率低（2轮RPC） （第一轮，希望多数人通过；第二轮，希望把方案落地执行执行）</p>
+<h3 id="2-3multi-Paxos"><a href="#2-3multi-Paxos" class="headerlink" title="2.3multi-Paxos"></a>2.3multi-Paxos</h3><p>只需要在第一次执行两轮</p>
+<p>第二次既以后执行一轮 添加了Following —— 话事人（<strong>可以决定的人</strong>）</p>
+<p><img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\1689865628403.png" alt="1689865628403" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="3-raft算法原理"><a href="#3-raft算法原理" class="headerlink" title="3.raft算法原理"></a>3.raft算法原理</h2><p><a target="_blank" rel="noopener" href="http://www.kailing.pub/raft/index.html">http://www.kailing.pub/raft/index.html</a><br>容易理解的Distributed Consensus分布式共识算法ww.kailing.pub&#x2F;raft&#x2F;index.html</p>
 
-<!-- history -->
+</article>
+    
+    
 
-<div class="row">
+</div>
+<div id="post-next-prev" class="row">
     <div class="col-lg-12">
         <!-- title -->
         <h5 class="trm-title-with-divider">
-            
-                Archive for 2023
-            
-            <span data-number="01"></span>
+            Other Articles
+            <span data-number="02"></span>
         </h5>
     </div>
-    <div class="col-lg-12">
-        <!-- timeline -->
-        <div class="trm-timeline">
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/08/10/Go%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="trm-cover-frame trm-anima-link">
             
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/09/12/%E9%A1%B9%E7%9B%AE%E4%BA%8C%E9%97%AE%E9%A2%98/" class="trm-anima-link">
-                                        商城项目中问题
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">09/12</li>
-                                        <li class="trm-accent-color">20:00</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
             </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/08/10/Go%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="trm-anima-link">
-                                        Go语言环境搭建
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">08/10</li>
-                                        <li class="trm-accent-color">19:31</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/07/21/paxos&raft%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/" class="trm-anima-link">
-                                        paxos&amp;raft算法原理
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">07/21</li>
-                                        <li class="trm-accent-color">14:10</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
+            <h5>
+                <a href="/2023/08/10/Go%E8%AF%AD%E8%A8%80%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="trm-anima-link">
+                    Go语言环境搭建
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/08/10</li>
+                <li>19:31</li>
+                
+                
+            </ul>
         </div>
-        <!-- timeline end -->
     </div>
 </div>
-
-<!-- history end -->
-
-
-    <div class="trm-pagination">
-        <span class="page-number current">1</span>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2022/12/09/My-New-Post/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
+            </div>
+            <h5>
+                <a href="/2022/12/09/My-New-Post/" class="trm-anima-link">
+                    My New Post
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/12/09</li>
+                <li>14:31</li>
+                
+                
+            </ul>
+        </div>
     </div>
+</div>
+    
+</div>
 
-
+    
 
 
 
@@ -472,6 +507,10 @@
 
             <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
     
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
     
     <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
         <i class="iconfont fas fa-arrow-up"></i>
@@ -508,6 +547,10 @@
     
 
     <!-- 评论插件 -->
+    
+        
+
+        
     
 
 
