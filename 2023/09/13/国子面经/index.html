@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="一面1.sql优化，项目中使用过吗一、如果限制条件中其他字段没有索引，尽量少用or or两边的字段中，如果有一个不是索引字段，而其他条件也不是索引字段，会造成该查询不走索引的情况。很多时候使用 union all 或者是union(必要的时候)的方式来代替“or”会得到更好的效果 二、如果排序字段没有用到索引，就尽量少排序 三、尽量用union all代替union union和union all">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试经验">
+<meta property="og:url" content="https://aaaalexqaq.github.io/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/index.html">
+<meta property="og:site_name" content="alex">
+<meta property="og:description" content="一面1.sql优化，项目中使用过吗一、如果限制条件中其他字段没有索引，尽量少用or or两边的字段中，如果有一个不是索引字段，而其他条件也不是索引字段，会造成该查询不走索引的情况。很多时候使用 union all 或者是union(必要的时候)的方式来代替“or”会得到更好的效果 二、如果排序字段没有用到索引，就尽量少排序 三、尽量用union all代替union union和union all">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="article:published_time" content="2023-09-13T12:56:12.449Z">
+<meta property="article:modified_time" content="2023-09-13T13:01:20.087Z">
+<meta property="article:author" content="Alex">
+<meta property="article:tag" content="tech">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+
+
+<title >面试经验</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.svg?v=2.0.9' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/favicon.svg?v=2.0.9' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"aaaalexqaq.github.io","author":"Alex","root":"/","typed_text":null,"theme_version":"2.0.9","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","appleTouchIcon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","showText":"(/≧▽≦/)Hey! Good again!","hideText":"(●—●)Oh, crash!"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-09-13 21:01:20"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.9" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/favicon.svg">
+    
+    
+        <div class="trm-logo-text">
+            Ren<span>Amamiya</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            面试经验
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Amamiya Ren
+    </h5>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/AAAALEXQAQ" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+        <a href="https://gitee.com/AAAALEXQAQ" title="gitee" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont cg-gitee"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                Residence:
+            </div>
+            <div class="trm-label trm-label-light">
+                山东德州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Age:
+            </div>
+            <div class="trm-label trm-label-light">
+                22
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:alexqaq@yeah.net" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            09/13
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            20:56
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Alex
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h1><h2 id="1-sql优化，项目中使用过吗"><a href="#1-sql优化，项目中使用过吗" class="headerlink" title="1.sql优化，项目中使用过吗"></a>1.sql优化，项目中使用过吗</h2><p><strong>一、如果限制条件中其他字段没有索引，尽量少用or</strong></p>
+<p>or两边的字段中，如果有一个不是索引字段，而其他条件也不是索引字段，会造成该查询不走索引的情况。很多时候使用 union all 或者是union(必要的时候)的方式来代替“or”会得到更好的效果</p>
+<p><strong>二、如果排序字段没有用到索引，就尽量少排序</strong></p>
+<p><strong>三、尽量用union all代替union</strong></p>
+<p>union和union all的差异主要是前者需要将结果集合并后再进行唯一性过滤操作，这就会涉及到排序，增加大量的CPU运算，加大资源消耗及延迟。当然，union all的前提条件是两个结果集没有重复数据。</p>
+<p><strong>四、避免在where子句中对字段进行表达式操作</strong></p>
+<p>比如</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> user_id,user_project <span class="keyword">from</span> table_name <span class="keyword">where</span> age<span class="operator">*</span><span class="number">2</span><span class="operator">=</span><span class="number">36</span>;</span><br></pre></td></tr></table></figure>
+
+<p>中对字段就行了算术运算，这会造成引擎放弃使用索引，建议改成</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> user_id,user_project <span class="keyword">from</span> table_name <span class="keyword">where</span> age<span class="operator">=</span><span class="number">36</span><span class="operator">/</span><span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>五、对于联合索引来说，要遵守最左前缀法则</strong></p>
+<p>举列来说索引含有字段id,name,school，可以直接用id字段，也可以id,name这样的顺序，但是name，school都无法使用这个索引。所以在创建联合索引的时候一定要注意索引字段顺序，常用的查询字段放在最前面</p>
+<p><strong>六、like 如果以通配符开头(’%abc…’)，会导致mysql索引失效，而变成全表扫描的操作</strong></p>
+<p><strong>七、少用or，用它来连接时会索引失效</strong></p>
+<h2 id="2-springmvc执行流程"><a href="#2-springmvc执行流程" class="headerlink" title="2.springmvc执行流程"></a>2.springmvc执行流程</h2><p><img src="/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/1694602946569.png" alt="1694602946569" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>在SpringMVC项目启动的时候，会扫描Controller下面所有加了注解的方法，构建HandlerMapping。</p>
+<p>1.用户发送请求至前端控制器DispatcherServlet</p>
+<p>2.DispatcherServlet收到请求调用处理器映射器HandlerMapping。</p>
+<p>3.处理器映射器根据请求url找到具体的处理器，生成处理器执行链</p>
+<p>HandlerExecutionChain(包括Handler对象和拦截器数组)一并返回给DispatcherServlet。</p>
+<p>4.DispatcherServlet根据请求执行的Handler获取处理器适配器HandlerAdapter处理一系列的操作，如：参数封装，数据格式转换，数据验证等操作</p>
+<p>5.执行处理器Handler(Controller)。</p>
+<p>6.Handler执行完成返回ModelAndView</p>
+<p>7.HandlerAdapter将Handler执行结果ModelAndView返回到DispatcherServlet</p>
+<p>8.DispatcherServlet将ModelAndView传给ViewReslover视图解析器</p>
+<p>9.ViewReslover解析后返回具体View</p>
+<p>10.DispatcherServlet对View进行渲染视图（即将模型数据model填充至视图中）。</p>
+<p>11.DispatcherServlet响应用户</p>
+<h2 id="3-Java中有几种基本数据类型？"><a href="#3-Java中有几种基本数据类型？" class="headerlink" title="3.Java中有几种基本数据类型？"></a>3.Java中有几种基本数据类型？</h2><p>8种</p>
+<p><img src="/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/1694603043780.png" alt="1694603043780" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/1694603073129.png" alt="1694603073129" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="4-线程创建"><a href="#4-线程创建" class="headerlink" title="4.线程创建"></a>4.线程创建</h2><p>Java中有几种方法可以实现一个线程？ </p>
+<p>创建一个线程有4种方式：</p>
+<p>1、  继承Thread类 </p>
+<p><strong>继承扩展性不强，java总只支持单继承，如果一个类继承Thread就不能继承其他的类了。</strong></p>
+<p> 2、实现Runnable接口 </p>
+<p> 3、实现Callable接口,重写call方法(有返回值)</p>
+<p> 4、线程池</p>
+<h2 id="5-char和varchar的区别"><a href="#5-char和varchar的区别" class="headerlink" title="5.char和varchar的区别"></a>5.char和varchar的区别</h2><p>1、最大长度：</p>
+<p>char最大长度是255字符，varchar最大长度是65535个字节。</p>
+<p>2、定长：</p>
+<p>char是定长的，不足的部分用隐藏空格填充，varchar是不定长的。</p>
+<p>3、空间使用：</p>
+<p>char会浪费空间，varchar会更加节省空间。</p>
+<p>4、查找效率：</p>
+<p>char查找效率会很高，varchar查找效率会更低。</p>
+<p>5、尾部空格：</p>
+<p>char插入时可省略，varchar插入时不会省略，查找时省略。</p>
+<h2 id="6-css选择器有哪些"><a href="#6-css选择器有哪些" class="headerlink" title="6.css选择器有哪些"></a>6.css选择器有哪些</h2><p><strong>简单选择器：</strong></p>
+<p>​	元素选择器：根据元素名称来选择HTML元素。</p>
+<p>​	ID选择器：使用HTML的ID属性来选择一个特定的元素。</p>
+<p>​	类选择器：选择具有特定class属性的HTML元素。</p>
+<p>​	分组选择器：可以将不同选择器放在同一组，统一设置样式。</p>
+<p>​	通用选择器：选择页面上的所有的 HTML 元素。</p>
+<p><strong>组合选择器：</strong></p>
+<p>​	后代选择器：匹配作为指定元素后代的所有元素。</p>
+<p>​	子选择器：只能选择作为某元素的子元素，不能选择到孙辈的元素。</p>
+<p><strong>伪类选择器：</strong></p>
+<p>​	伪类选择器：属于类选择器中的一种，根据特定状态选取元素。</p>
+<p>​	鼠标行为：</p>
+<ul>
+<li><code>	:link</code> 鼠标点击前</li>
+<li><code>:visited</code> 鼠标点击后</li>
+<li><code>:hover</code> 鼠标悬停时</li>
+<li><code>:active</code> 鼠标点击时</li>
+</ul>
+<p><strong>伪元素选择器：</strong></p>
+<p>​	通过伪元素选择器，可以设置元素指定部分的样式。主要用来设置元素内文本的首字母，首行的样式或是在元素内容之前或之后插入其他内容。</p>
+<p>分类：</p>
+<ul>
+<li><code>::first-letter</code> 首字母</li>
+<li><code>::first-line</code> 首行</li>
+<li><code>::before</code> 之后插入内容</li>
+<li><code>::after</code> 之前插入内容</li>
+<li><code>::selection</code> 修改选中文本的样式</li>
+</ul>
+<p><strong>属性选择器</strong>：</p>
+<p>根据元素的属性及属性值来选择元素。</p>
+<p>格式为：</p>
+<ul>
+<li><code>[attr]</code>: 查找带有attr属性的所有元素；</li>
+<li><code>[attr=&quot;value&quot;]</code>:查找带有attr属性，并且属性值为value的元素；</li>
+<li><code>[attr*=&quot;value&quot;]</code>:查找带有attr属性，并且属性值包含value的元素；</li>
+<li><code>[attr^=&quot;value&quot;]</code>:查找带有attr属性，并且属性值以value开头的元素；</li>
+<li><code>[attr$=&quot;value&quot;]</code>:查找带有attr属性，并且属性值以value结尾的元素；</li>
+</ul>
+<h2 id="7-数据库连接不上的原因"><a href="#7-数据库连接不上的原因" class="headerlink" title="7.数据库连接不上的原因"></a>7.数据库连接不上的原因</h2><p>无效的主机名或 IP 地址</p>
+<p>无效的用户名或密码</p>
+<p>数据库服务器未运行</p>
+<p>防火墙或网络配置问题</p>
+<p>错误的端口号	</p>
+<p>MySQL 配置错误</p>
+<p>MySQL 数据库服务不可用</p>
+<p>数据库权限问题</p>
+<h2 id="8-a电脑访问不到b电脑的原因"><a href="#8-a电脑访问不到b电脑的原因" class="headerlink" title="8. a电脑访问不到b电脑的原因"></a>8. a电脑访问不到b电脑的原因</h2><p>1，a和b电脑不在一个局域网<br>2，a和b没有在一个工作组<br>3，a电脑gost用户没有开启</p>
+<h1 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h1><h2 id="1-sql优化，项目中使用过吗-1"><a href="#1-sql优化，项目中使用过吗-1" class="headerlink" title="1.sql优化，项目中使用过吗"></a>1.sql优化，项目中使用过吗</h2><p>第一题</p>
+<h2 id="2-怎样实现权限管理的查询（逻辑，成功或失败）"><a href="#2-怎样实现权限管理的查询（逻辑，成功或失败）" class="headerlink" title="2.怎样实现权限管理的查询（逻辑，成功或失败）"></a>2.怎样实现权限管理的查询（逻辑，成功或失败）</h2><p>session</p>
+<p>总体思路：<br>1.用户填写完账号和密码后向服务端验证是否正确，验证通过之后，服务端会返回一个token。</p>
+<p>2.拿到token之后将这个token存起来，保证刷新页面后能记住用户登录状态，根据token去调用userInfo的接口来获取用户的详细信息（如用户权限，用户名等等信息）。</p>
+<p>3.权限验证：通过token获取用户对应的权限，将请求的权限数组和用户信息存储到vuex中 ，动态根据用户的权限通过处理得到其对应有权限的路由，通过 router.addRoutes 动态添加这些路由。</p>
+<p>一、登录：<br>登录成功后，服务端会返回一个 token（该token的是一个能唯一标示用户身份的一个key），之后我们将token存储在本地localstorage之中，这样下次打开页面或者刷新页面的时候能记住用户的登录状态，不用再去登录页面重新登录了。</p>
+<p>存token</p>
+<p>涉及的安全性问题：</p>
+<p>为了保证安全性，后台所有token有效期(Expires&#x2F;Max-Age)都是Session，就是当浏览器关闭了就丢失了。重新打开浏览器都需要重新登录验证，后端也会在每周固定一个时间点重新刷新token，让后台用户全部重新登录一次，确保后台用户不会因为电脑遗失或者其它原因被人随意使用账号。</p>
+<p>二、拦截路由进行判断<br>用户登录成功之后，我们会在全局钩子router.beforeEach中拦截路由，判断是否已获得token，在获得token之后我们就要去获取用户的基本信息了</p>
+<p>页面会先从 localstorage中查看是否存有 token，没有，就走一遍上一部分的流程重新登录，如果有token,就会把这个 token 返给后端去拉取user_info，保证用户信息是最新的。 当然如果是做了单点登录得的的话，用户信息存储在本地也是可以的。当你一台电脑登录时，另一台会被提下线，所以总会重新登录获取最新的内容。</p>
+<p>三、权限控制<br>前端会有一份路由表，它表示了每一个路由可访问的权限。当用户登录之后，通过 token 获取用户的 role ，动态根据用户的 role 算出其对应有权限的路由，再通过router.addRoutes动态挂载路由。但这些控制都只是页面级的，说白了前端再怎么做权限控制都不是绝对安全的，后端的权限验证是逃不掉的。</p>
+<p>router.addRoutes动态添加路由</p>
+<p>前端控制页面级的权限，不同权限的用户显示不同的侧边栏和限制其所能进入的页面(也做了少许按钮级别的权限控制)，后端则会验证每一个涉及请求的操作，验证其是否有该操作的权限，每一个后台的请求不管是 get 还是 post 都会让前端在请求 header里面携带用户的 token，后端会根据该 token 来验证用户是否有权限执行该操作。若没有权限则抛出一个对应的状态码，前端检测到该状态码，做出相对应的操作。</p>
+<p>请求拦截内设置请求头</p>
+<p>四、利用vuex管理路由表，根据vuex中可访问的路由渲染侧边栏组件。<br>具体实现：<br>1.创建<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=vue&spm=1001.2101.3001.7020">vue</a>实例的时候将vue-router挂载，但这个时候vue-router挂载一些登录或者不用权限的公用的页面。<br>2.当用户登录后，获取用role，将role和路由表每个页面的需要的权限作比较，生成最终用户可访问的路由表。<br>3.调用router.addRoutes(store.getters.addRouters)添加用户可访问的路由。<br>4.使用vuex管理路由表，根据vuex中可访问的路由渲染侧边栏组件。</p>
+<h2 id="3-前台展示图片过多，卡顿怎么解决的"><a href="#3-前台展示图片过多，卡顿怎么解决的" class="headerlink" title="3.前台展示图片过多，卡顿怎么解决的"></a>3.前台展示图片过多，卡顿怎么解决的</h2><p>把图片服务器与应用服务器分开,图片服务器采用独立域名 ,css、js和图片就可以并发请求了</p>
+<p>我们可以借助一些第三方软件来进行压缩</p>
+<p>像淘宝或者京东这样的APP页面上有很多图片,当我们滑到下一屏时下一屏的图片才会加载,这就采用了图片懒加载的方式.图片懒加载,简单来说就是在页面渲染过程中,图片不会一次性全部加载,会在需要的时候加载,</p>
+<p>将图片压缩成base64格式来节约请求</p>
+<h2 id="4-前后端交互方式"><a href="#4-前后端交互方式" class="headerlink" title="4.前后端交互方式"></a>4.前后端交互方式</h2><p>表单提交  Ajax</p>
+<h2 id="5-ajax同步或异步，实际业务中是否遇到过同步的处理"><a href="#5-ajax同步或异步，实际业务中是否遇到过同步的处理" class="headerlink" title="5.ajax同步或异步，实际业务中是否遇到过同步的处理"></a>5.ajax同步或异步，实际业务中是否遇到过同步的处理</h2><p>ajax同步请求，是指当前端通过ajax发送一个请求到服务端，JavaScript 会等到服务器响应就绪才继续执行。<br>jquery中怎么设置同步请求，把async参数设置为false即可，默认是true</p>
+<p>异步请求：ajax发送请求后，JavaScript 无需等待服务器的响应，继续执行接下来的代码，等到响应成功以后，执行响应的结果；</p>
+<h2 id="6-使用ajax用到的方式"><a href="#6-使用ajax用到的方式" class="headerlink" title="6.使用ajax用到的方式"></a>6.使用ajax用到的方式</h2><p>$.ajax使用方法<br>常用参数：<br>1、url 请求地址<br>2、type 请求方式，默认是’GET’，常用的还有’POST’<br>3、dataType 设置返回的数据格式，常用的是’json’格式，也可以设置为’html’<br>4、data 设置发送给服务器的数据<br>5、success 设置请求成功后的回调函数<br>6、error 设置请求失败后的回调函数<br>7、async 设置是否异步，默认值是’true’，表示异步</p>
+<h2 id="7-前台传后台，后台传前台json结构的数据是怎样处理的"><a href="#7-前台传后台，后台传前台json结构的数据是怎样处理的" class="headerlink" title="7.前台传后台，后台传前台json结构的数据是怎样处理的"></a>7.前台传后台，后台传前台json结构的数据是怎样处理的</h2><p>前端发送JSON</p>
+<p>​	ajax</p>
+<p>后端发送 JSON 数据</p>
+<p>​	1.<strong>fastjson</strong></p>
+<p>​	2.<strong>jackson</strong></p>
+<p>​	3.<strong>使用 springmvc 的 @RestController 注解</strong></p>
+<p>后端接收 JSONObject 的方法</p>
+<p>​	1.@RequestBody 主要<code>用来接收前端传递给后端的 JSON 数据</code>(请求体中的数据的)；而最常用的使用请求体传参的无疑是 POST 请求了，所以<code>使用 @RequestBody 接收数据时，一般都用 POST 方式进行提交</code>。</p>
+<p>​	2.RequestBody 接收的是请求体里面的数据；而 RequestParam 接收的是key-value 里面的参数。<br>如果参数时放在请求体中，application&#x2F;json 传入后台的话，那么后台要用@RequestBody 才能接收到；如果不是放在请求体中的话，那么后台接收前台传过来的参数时，要用 @RequestParam 来接收，或则形参前什么也不写也能接收。</p>
+<h2 id="8-MySQL的隔离机制是怎样的，项目中使用的是哪种"><a href="#8-MySQL的隔离机制是怎样的，项目中使用的是哪种" class="headerlink" title="8.MySQL的隔离机制是怎样的，项目中使用的是哪种"></a>8.MySQL的隔离机制是怎样的，项目中使用的是哪种</h2><p>​	数据库系统必须具有隔离并发运行各个事务的能力，使它们不会相互影响，避免各种并发问题。一个事务与其他事务隔离的程度称为隔离级别。SQL标准中规定了多种事务隔离级别，不同隔离级别对应不同的干扰程度，隔离级别越高，数据一致性就越好，但并发性越弱。</p>
+<p>1、读未提交：READ  UNCOMMITTED</p>
+<p>　 允许Transaction01读取Transaction02未提交的修改。</p>
+<p>2、读已提交：READ  COMMITTED</p>
+<p>　 要求Transaction01只能读取Transaction02已提交的修改。</p>
+<p>3、可重复读：REPEATABLE  READ</p>
+<p>   确保Transaction01可以多次从一个字段中读取到相同的值，即Transaction01执行期间禁止其它事务对这个字段进行更新。</p>
+<p>4、串行化：SERIALIZABLE</p>
+<p>　 确保Transaction01可以多次从一个表中读取到相同的行，在Transaction01执行期间，禁止其它事务对这个表进行添加、更新、删除操作。可以避免任何并发问题，但性能十分低下。（单线程，在一个请求中，其他线程读都不可以）</p>
+<p><img src="/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/clip_image002.jpg" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>可以在@Transactional的isolation属性中设置隔离级别，并不是隔离级别越高越好，一般是READ COMMITTED读已提交。</p>
+<p>Isolation.REPEATABLE_READ：可重复读，MySQL默认的隔离级别</p>
+<p>Isolation.READ_COMMITTED：读已提交，Oracle默认的隔离级别，开发时通常使用的隔离级别</p>
+<p>在项目中一般用读已提交(Read Commited)这个隔离级别</p>
+<p>假设现在有两个事务：Transaction01和Transaction02并发执行。</p>
+<p>1、  脏读（当前事物读到了其他事物更新但是还没有提交的值就是脏读）</p>
+<p>①Transaction01将某条记录的AGE值从20修改为30。</p>
+<p>②Transaction02读取了Transaction01更新后的值：30。Read Uncommited</p>
+<p>③Transaction01回滚，AGE值恢复到了20。</p>
+<p>④Transaction02读取到的30就是一个无效的值。</p>
+<p>只有脏读是读取了别人更新但是还没有提交到数据库的数据，不可重复读和幻读都是读取已经提交数据库的数据。</p>
+<p>2、不可重复读 </p>
+<p>①Transaction01读取了AGE值为20。</p>
+<p>②Transaction02将AGE值修改为30。</p>
+<p>③Transaction01再次读取AGE值为30，和第一次读取的不一样</p>
+<p>这样就发生了在一个事务内两次读到的数据是不一样的，因此称为是不可重复读。</p>
+<p>3、幻读</p>
+<p>①Transaction01读取了STUDENT表中的一部分数据</p>
+<p>②Transaction02向STUDENT表中插入了新的行</p>
+<p>③Transaction01读取了STUDENT表时，多出了一些行。</p>
+<h2 id="9-读已提交"><a href="#9-读已提交" class="headerlink" title="9.读已提交"></a>9.读已提交</h2><p>略</p>
+<h2 id="10-项目是否做过MySQL查询上的优化"><a href="#10-项目是否做过MySQL查询上的优化" class="headerlink" title="10.项目是否做过MySQL查询上的优化"></a>10.项目是否做过MySQL查询上的优化</h2><ul>
+<li>减少子任务执行次数</li>
+<li>消除子任务的方式</li>
+<li>让子任务运行的更快</li>
+</ul>
+<h2 id="11-MVC三层架构"><a href="#11-MVC三层架构" class="headerlink" title="11.MVC三层架构"></a>11.MVC三层架构</h2><p><strong>MVC模式</strong>是软件工程中常见的一种软件架构模式，该模式把软件系统（项目）分为三个基本部分：<strong>模型（Model）、视图（View）和控制器（Controller）。</strong></p>
+<p><strong>（1）视图（View）：</strong>负责界面的显示，以及与用户的交互功能，例如表单、网页等。</p>
+<p><strong>（2）控制器（Controller）：</strong>可以理解为一个分发器，用来决定对于视图发来的请求，需要用哪一个模型来处理，以及处理完后需要跳回到哪一个视图。即用来连接视图和模型。</p>
+<p>实际开发中，通常用控制器对客户端的请求数据进行封装（如将form表单发来的若干个表单字段值，封装到一个实体对象中），然后调用某一个模型来处理此请求，最后再转发请求（或重定向）到视图（或另一个控制器）。</p>
+<p><strong>（3）模型（Model）：</strong>模型持有所有的数据、状态和程序逻辑。模型接受视图数据的请求，并返回最终的处理结果。</p>
+<h2 id="12-spring切面如何理解的"><a href="#12-spring切面如何理解的" class="headerlink" title="12.spring切面如何理解的"></a>12.spring切面如何理解的</h2><p>@Aspect：切面。表示一个横切进业务的一个对象。它里面包含切入点(Pointcut)和Advice（通知）。</p>
+<p>@Pointcut：切入点。表示需要切入的位置，比如某些类或者某些方法，也就是先定一个范围。</p>
+<p>AOP通知：</p>
+<p>1、前置通知@Before：在方法调用之前执行</p>
+<p>2、后置通知@AfterReturning：在方法正常调用之后执行</p>
+<p>3、环绕通知@Around：在方法调用之前和之后，都分别可以执行的通知</p>
+<p>4、异常通知@AfterThrowing:如果在方法调用过程中发生异常，则通知</p>
+<p>5、最终通知 @After:在方法调用之后执行，类似于finally</p>
+<h2 id="13-spring的两大特征IOC的理解"><a href="#13-spring的两大特征IOC的理解" class="headerlink" title="13.spring的两大特征IOC的理解"></a>13.spring的两大特征IOC的理解</h2><p>**控制反转(**Inversion on Control)IOC：</p>
+<p>原来在程序中手动创建对象，现在对象的创建交给外部容器来完成（这里就是交给Spring容器），这就叫控制反转。</p>
+<p><strong>依赖注入：</strong>Dependency<br>injection （DI）将对象之间的相互依赖关系交给 IOC 容器来管理，并由 IOC 容器完成对象的注入。</p>
+<h2 id="14-linux常见命令"><a href="#14-linux常见命令" class="headerlink" title="14.linux常见命令"></a>14.linux常见命令</h2><p>cd 切换目录</p>
+<p>mkdir 创建目录</p>
+<p>cp 拷贝</p>
+<p>mv 移动或重命名</p>
+<p>rm 删除文件</p>
+<p>grep 在文本文件中查找某个字符串</p>
+<p>pwd 显示当前目录</p>
+<p>ping 测试网络连通</p>
+<p>clear 清屏</p>
+<p>kill 杀死进程，可以先用ps 或 top命令查看进程的id，然后再用kill命令杀死进程。</p>
+<p>shutdown关机&#x2F;重启机器</p>
+<h2 id="15-怎么让div居中"><a href="#15-怎么让div居中" class="headerlink" title="15.怎么让div居中"></a>15.怎么让div居中</h2><p>1、使用CSS设置margin</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解释：通过设置 div 元素的左右 margin 值为 auto，可以使其在可见区域内居中。</p>
+<p>2.CSS3中新增了transform 属性实现水平垂直居中</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.wrapper</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(-<span class="number">50%</span>, -<span class="number">50%</span>);</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解释：通过调整容器坐标原点的位置，使其在水平、垂直方向上偏移50%的距离，并使用position属性为absolute，可以实现div居中显示。</p>
+<h2 id="16-JQuery选择器"><a href="#16-JQuery选择器" class="headerlink" title="16.JQuery选择器"></a>16.JQuery选择器</h2><p>1.基本选择器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;#id&quot;)            //ID选择器</span><br><span class="line">$(&quot;div&quot;)            //元素选择器</span><br><span class="line">$(&quot;.classname&quot;)     //类选择器</span><br><span class="line">$(&quot;.classname,.classname1,#id1&quot;)     //组合选择器</span><br></pre></td></tr></table></figure>
+
+<p>2.层次选择器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> $(&quot;#id&gt;.classname &quot;)    //子元素选择器</span><br><span class="line">$(&quot;#id .classname &quot;)    //后代元素选择器</span><br><span class="line">$(&quot;#id + .classname &quot;)    //紧邻下一个元素选择器</span><br><span class="line">$(&quot;#id ~ .classname &quot;)    //兄弟元素选择器</span><br></pre></td></tr></table></figure>
+
+<p>3.过滤选择器(重点)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;li:first&quot;)    //第一个li</span><br><span class="line">$(&quot;li:last&quot;)     //最后一个li</span><br><span class="line">$(&quot;li:even&quot;)     //挑选下标为偶数的li</span><br><span class="line">$(&quot;li:odd&quot;)      //挑选下标为奇数的li</span><br><span class="line">$(&quot;li:eq(4)&quot;)    //下标等于 4 的li(第五个 li 元素)</span><br><span class="line">$(&quot;li:gt(2)&quot;)    //下标大于 2 的li</span><br><span class="line">$(&quot;li:lt(2)&quot;)    //下标小于 2 的li</span><br><span class="line">$(&quot;li:not(#runoob)&quot;) //挑选除 id=&quot;runoob&quot; 以外的所有li</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.2内容过滤选择器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;div:contains(&#x27;Runob&#x27;)&quot;)    // 包含 Runob文本的元素</span><br><span class="line">$(&quot;td:empty&quot;)                 //不包含子元素或者文本的空元素</span><br><span class="line">$(&quot;div:has(selector)&quot;)        //含有选择器所匹配的元素</span><br><span class="line">$(&quot;td:parent&quot;)                //含有子元素或者文本的元素</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.3可见性过滤选择器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;li:hidden&quot;)       //匹配所有不可见元素，或type为hidden的元素</span><br><span class="line">$(&quot;li:visible&quot;)      //匹配所有可见元素</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.4属性过滤选择器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;div[id]&quot;)        //所有含有 id 属性的 div 元素</span><br><span class="line">$(&quot;div[id=&#x27;123&#x27;]&quot;)        // id属性值为123的div 元素</span><br><span class="line">$(&quot;div[id!=&#x27;123&#x27;]&quot;)        // id属性值不等于123的div 元素</span><br><span class="line">$(&quot;div[id^=&#x27;qq&#x27;]&quot;)        // id属性值以qq开头的div 元素</span><br><span class="line">$(&quot;div[id$=&#x27;zz&#x27;]&quot;)        // id属性值以zz结尾的div 元素</span><br><span class="line">$(&quot;div[id*=&#x27;bb&#x27;]&quot;)        // id属性值包含bb的div 元素</span><br><span class="line">$(&quot;input[id][name$=&#x27;man&#x27;]&quot;) //多属性选过滤，同时满足两个属性的条件的元素</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.5状态过滤选择器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;input:enabled&quot;)    // 匹配可用的 input</span><br><span class="line">$(&quot;input:disabled&quot;)   // 匹配不可用的 input</span><br><span class="line">$(&quot;input:checked&quot;)    // 匹配选中的 input</span><br><span class="line">$(&quot;option:selected&quot;)  // 匹配选中的 option</span><br></pre></td></tr></table></figure>
+
+<p>4.表单选择器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;:input&quot;)      //匹配所有 input, textarea, select 和 button 元素</span><br><span class="line">$(&quot;:text&quot;)       //所有的单行文本框，$(&quot;:text&quot;) 等价于$(&quot;[type=text]&quot;)，推荐使用$(&quot;input:text&quot;)效率更高，下同</span><br><span class="line">$(&quot;:password&quot;)   //所有密码框</span><br><span class="line">$(&quot;:radio&quot;)      //所有单选按钮</span><br><span class="line">$(&quot;:checkbox&quot;)   //所有复选框</span><br><span class="line">$(&quot;:submit&quot;)     //所有提交按钮</span><br><span class="line">$(&quot;:reset&quot;)      //所有重置按钮</span><br><span class="line">$(&quot;:button&quot;)     //所有button按钮</span><br><span class="line">$(&quot;:file&quot;)       //所有文件域</span><br></pre></td></tr></table></figure>
+
+<h2 id="17-Java8新特性，项目中哪里使用到了"><a href="#17-Java8新特性，项目中哪里使用到了" class="headerlink" title="17.Java8新特性，项目中哪里使用到了"></a>17.Java8新特性，项目中哪里使用到了</h2><ol>
+<li>Lambda表达式</li>
+</ol>
+<p>Lambda表达式是Java 8的一大亮点，它允许开发者以简洁的语法创建匿名函数。这种表达式能简化代码，提高代码可读性。</p>
+<p>2.Stream API</p>
+<p>Java 8引入了Stream API，提供了一种新的数据处理方式。Stream API使得对集合进行操作变得更加简洁高效。</p>
+<p>3.Optional类</p>
+<p>Java 8引入了Optional类，用于解决空指针异常问题。Optional类是一个容器，它可以包含一个非空对象，也可以为空。通过使用Optional类，我们可以避免空指针异常，提高代码的健壮性。</p>
+<p>4.Java 8提供了全新的日期和时间API，解决了原有日期和时间处理的不足。新API采用不可变对象设计，提供了清晰的API和更好的性能。</p>
+<h2 id="18-项目中有没有用lambda表达式"><a href="#18-项目中有没有用lambda表达式" class="headerlink" title="18.项目中有没有用lambda表达式"></a>18.项目中有没有用lambda表达式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.forEach(s -&gt; System.out.println(s));</span><br></pre></td></tr></table></figure>
+
+<h2 id="19-项目中登陆的实现（验证码）"><a href="#19-项目中登陆的实现（验证码）" class="headerlink" title="19.项目中登陆的实现（验证码）"></a>19.项目中登陆的实现（验证码）</h2><p>hutool工具类</p>
+<p>项目一项目二使用session存储登录成功后的用户信息，若为空无权访问其他页面</p>
+<p>项目三使用token</p>
+<h2 id="20-前端框架是怎么实现的"><a href="#20-前端框架是怎么实现的" class="headerlink" title="20.前端框架是怎么实现的"></a>20.前端框架是怎么实现的</h2><p>以HTML、CSS、JS为基础</p>
+<p>使用时导入，要符合框架的规范</p>
+<h2 id="22-mysql的事务隔离级别"><a href="#22-mysql的事务隔离级别" class="headerlink" title="22.mysql的事务隔离级别"></a>22.mysql的事务隔离级别</h2><p>第8题</p>
+<h2 id="23-tomcat怎么改端口号，在哪个文件里"><a href="#23-tomcat怎么改端口号，在哪个文件里" class="headerlink" title="23.tomcat怎么改端口号，在哪个文件里"></a>23.tomcat怎么改端口号，在哪个文件里</h2><p>打开server.xml后，在里面找到下图的一段代码，里面的port&#x3D;“8080”就代表Tomcat的默认端口号，修改8080的值就可以成功改Tomcat的默认端口号。</p>
+<p>spring直接在配置文件里改</p>
+<h2 id="24-过滤器filter在项目里面那个地方使用到了"><a href="#24-过滤器filter在项目里面那个地方使用到了" class="headerlink" title="24.过滤器filter在项目里面那个地方使用到了"></a>24.过滤器filter在项目里面那个地方使用到了</h2><p><code>init</code>：<strong>在服务器启动时</strong>会创建Filter实例，并且每个类型的Filter只创建一个实例，从此不再创建，在创建完Filter实例后，会马上调用init()方法完成初始化工作，这个方法只会被执行一次；</p>
+<p><code>doFilter</code>：这个方法会在用户每次访问目标资源（web.xml文件配置Filter的url-pattern中的路径）时执行，如果需要“放行”，那么需要调用FilterChain的doFilter(ServletRequest,ServletResponse)方法，如果不调用FilterChain的doFilter()方法，那么目标资源将无法执行；</p>
+<p><code>destroy</code> ：服务器会在创建Filter对象之后，把Filter放到缓存中一直使用，通常不会销毁它。一般会在服务器关闭时销毁Filter对象，在销毁Filter对象之前，服务器会调用Filter对象的destory()方法。</p>
+<p>修改TestFilter的代码，进行测试</p>
+<blockquote>
+<p>修改登录案例，使用Filter进行权限验证：</p>
+<ul>
+<li>登录成功，直接进入success.jsp；</li>
+<li>登录失败，跳转到login.jsp，并显示提示信息；</li>
+<li>强行访问success.jsp，跳转到login.jsp，并显示提示信息，提示未登录；</li>
+</ul>
+<p>用于登录验证的Filter代码如下:</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用于登录验证的Filter</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@WebFilter(filterName = &quot;LoginFilter&quot;, value = &#123;&quot;/success.jsp&quot;&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoginFilter</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(FilterConfig config)</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain chain)</span> <span class="keyword">throws</span> ServletException, IOException &#123;</span><br><span class="line">        <span class="type">HttpServletRequest</span> <span class="variable">req</span> <span class="operator">=</span> (HttpServletRequest)request;</span><br><span class="line">        <span class="type">HttpServletResponse</span> <span class="variable">resp</span> <span class="operator">=</span> (HttpServletResponse)response;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取Session</span></span><br><span class="line">        <span class="type">HttpSession</span> <span class="variable">session</span> <span class="operator">=</span> req.getSession();</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> (User) session.getAttribute(<span class="string">&quot;user&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span>(user == <span class="literal">null</span>) &#123;</span><br><span class="line">            request.setAttribute(<span class="string">&quot;errorMsg&quot;</span>, <span class="string">&quot;您还未登录,请先登录&quot;</span>);</span><br><span class="line">            request.getRequestDispatcher(<span class="string">&quot;/login.jsp&quot;</span>).forward(request, response);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        chain.doFilter(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="25-在div中怎么把文字居中"><a href="#25-在div中怎么把文字居中" class="headerlink" title="25.在div中怎么把文字居中"></a>25.在div中怎么把文字居中</h2><p>为文字所在div添加“text-align:center”样式来设置div中文字居中即可。</p>
+<h2 id="26-sql里面的聚合函数"><a href="#26-sql里面的聚合函数" class="headerlink" title="26.sql里面的聚合函数"></a>26.sql里面的聚合函数</h2><p>1.求个数、记录条数count() </p>
+<p>2.求合计数 sum() 如</p>
+<p>3.求平均数 avg() </p>
+<p>4.求最大值、最小值max()和min()</p>
+<h2 id="27-spring里面的各种注解"><a href="#27-spring里面的各种注解" class="headerlink" title="27.spring里面的各种注解"></a>27.spring里面的各种注解</h2><p>@Component ：标准一个普通的spring Bean类。 @Repository：标注一个DAO组件类。 @Service：标注一个业务逻辑组件类。 @Controller：标注一个控制器组件类。 这些都是注解在平时的开发过程中出镜率极高，@Component、@Repository、@Service、@Controller实质上属于同一类注解，用法相同，功能相同，区别在于标识组件的类型。 @Component可以代替@Repository、@Service、@Controller，因为这三个注解是被@Component标注的。</p>
+<p>@Autowired：属于Spring 的org.springframework.beans.factory.annotation包下,可用于为类的属性、构造器、方法进行注值 @Resource：不属于spring的注解，而是来自于JSR-250位于java.annotation包下，使用该annotation为目标bean指定协作者Bean。 @PostConstruct 和 @PreDestroy 方法 实现初始化和销毁bean之前进行的操作<br>@ configuration</p>
+<p>@RequestMapping @RequestBody </p>
+<h2 id="28-重载和重写的区别"><a href="#28-重载和重写的区别" class="headerlink" title="28.重载和重写的区别"></a>28.重载和重写的区别</h2><p>重载：发生在同一个类中，方法名必须相同，参数类型不同、个数不同、顺序不同，跟方法返回值和访问修饰符没有关系 </p>
+<p>重写：解决子类继承父类之后,可能父类的某一个方法不满足子类的具体特征,此时需要重新在子类中定义该方法,并重写方法体.</p>
+<p>1、重写在方法运行时，通过调用者 的实际类型来确定调用的方法版本。</p>
+<p>2、重写只发生在可见的实例方法中：</p>
+<p>   1、静态方法不存在重写，形式上的重写只能说是隐藏。</p>
+<p>   2、私有方法也不存在重写，父类中private的方法，子类中就算定义了，就是相当于一个新的方法。</p>
+<p>3、重写满足一个规则：两同两小一大</p>
+<p>   1、两同：方法名和形参列表一致</p>
+<p>   2、两小：重写方法的返回值（引用类型）和抛出异常，要和被重写方法的返回值（引用类型）和抛出异常相同或者是其子类。注意，一旦返回值是基本数据类型，那么重写方法和被重写方法必须相同，且不存在自动拆装箱的问题。</p>
+<p>   3、一大：重写方法的访问修饰符大于等于被重写方法的访问修饰符。</p>
+<h2 id="29-堆栈怎么优化"><a href="#29-堆栈怎么优化" class="headerlink" title="29.堆栈怎么优化"></a>29.堆栈怎么优化</h2><p>熟悉业务场景，选择合适的垃圾回收器</p>
+<p>计算内存需求，给 Jvm 设置合适的内存大小</p>
+<p>进行压测监控 JMeter</p>
+<p>选定 CPU，越高越好</p>
+<p>设定日志参数</p>
+
+</article>
+    
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/08/25/%E9%A1%B9%E7%9B%AE%E4%BA%8C%E9%97%AE%E9%A2%98/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/08/25/%E9%A1%B9%E7%9B%AE%E4%BA%8C%E9%97%AE%E9%A2%98/" class="trm-anima-link">
+                    商城项目中问题
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/08/25</li>
+                <li>20:00</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.0.9
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.9"></script>
+
+</body>
+
+</html>
