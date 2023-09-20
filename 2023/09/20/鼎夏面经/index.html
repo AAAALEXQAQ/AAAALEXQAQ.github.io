@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="面试经验2SpringBoot的主入口注解@SpringBootApplication 什么情况下使用responsebody，通常和谁结合使用@responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP response body中。比如异步获取json数据，加上@responsebody后，会直接返回json数据。 @RestController是@Controller和@R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试经验2">
+<meta property="og:url" content="https://aaaalexqaq.github.io/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/index.html">
+<meta property="og:site_name" content="alex">
+<meta property="og:description" content="面试经验2SpringBoot的主入口注解@SpringBootApplication 什么情况下使用responsebody，通常和谁结合使用@responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP response body中。比如异步获取json数据，加上@responsebody后，会直接返回json数据。 @RestController是@Controller和@R">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="og:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+<meta property="article:published_time" content="2023-09-20T09:30:28.126Z">
+<meta property="article:modified_time" content="2023-09-20T11:09:54.418Z">
+<meta property="article:author" content="Alex">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://aaaalexqaq.github.io/img/404.jpg">
+
+
+<title >面试经验2</title>
+
+<!-- Favicon -->
+
+    <link href='/img/favicon.svg?v=2.0.9' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/favicon.svg?v=2.0.9' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"aaaalexqaq.github.io","author":"Alex","root":"/","typed_text":null,"theme_version":"2.0.9","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","appleTouchIcon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","showText":"(/≧▽≦/)Hey! Good again!","hideText":"(●—●)Oh, crash!"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-09-20 19:09:54"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.9" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/favicon.svg">
+    
+    
+        <div class="trm-logo-text">
+            Ren<span>Amamiya</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            面试经验2
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div id="page-sidebar" class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Amamiya Ren
+    </h5>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/AAAALEXQAQ" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+        <a href="https://gitee.com/AAAALEXQAQ" title="gitee" rel="nofollow" target="_blank">
+            <i class="iconfont iconfont cg-gitee"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                Residence:
+            </div>
+            <div class="trm-label trm-label-light">
+                山东德州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                Age:
+            </div>
+            <div class="trm-label trm-label-light">
+                22
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:alexqaq@yeah.net" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div id="page-content" class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            09/20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            17:30
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Alex
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="面试经验2"><a href="#面试经验2" class="headerlink" title="面试经验2"></a>面试经验2</h1><h2 id="SpringBoot的主入口注解"><a href="#SpringBoot的主入口注解" class="headerlink" title="SpringBoot的主入口注解"></a>SpringBoot的主入口注解</h2><p>@SpringBootApplication</p>
+<h2 id="什么情况下使用responsebody，通常和谁结合使用"><a href="#什么情况下使用responsebody，通常和谁结合使用" class="headerlink" title="什么情况下使用responsebody，通常和谁结合使用"></a>什么情况下使用responsebody，通常和谁结合使用</h2><p>@responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP response body中。比如异步获取json数据，加上@responsebody后，会直接返回json数据。</p>
+<p>@RestController是@Controller和@ResponseBody的结合体，两个标注合并起来的作用。</p>
+<p>@RestController类中的所有方法只能返回String、Object、Json等实体对象，不能跳转到模版页面。</p>
+<h2 id="什么情况下，一个接口可以返回一个路径而不是字符串。包含什么注解的时候生效。"><a href="#什么情况下，一个接口可以返回一个路径而不是字符串。包含什么注解的时候生效。" class="headerlink" title="什么情况下，一个接口可以返回一个路径而不是字符串。包含什么注解的时候生效。"></a>什么情况下，一个接口可以返回一个路径而不是字符串。包含什么注解的时候生效。</h2><p>需要使用@Controller，在返回字符串的方法上使用@ResponseBody</p>
+<p>当不需要返回页面时，可以直接使用@RestController来代替@Controller和@ResponseBody，即可直接返回结果</p>
+<p>当Controller是存在返回页面的控制器时，不可以使用@RestController</p>
+<h2 id="Maven打包的常用命令"><a href="#Maven打包的常用命令" class="headerlink" title="Maven打包的常用命令"></a>Maven打包的常用命令</h2><p>1、mvn compile 编译,将Java 源程序编译成 class 字节码文件。</p>
+<p>2、mvn test 测试，并生成测试报告</p>
+<p>3、mvn clean 将以前编译得到的旧的 class 字节码文件删除</p>
+<p>4、mvn pakage 打包,动态 web工程打 war包，Java工程打 jar 包。</p>
+<p>5、mvn install 将项目生成 jar 包放在仓库中，以便别的模块调用</p>
+<p>6、mvn clean install -Dmaven.test.skip&#x3D;true  抛弃测试用例打包</p>
+<h2 id="如何删除list表中的项"><a href="#如何删除list表中的项" class="headerlink" title="如何删除list表中的项"></a>如何删除list表中的项</h2><p><strong>方法一：Iterator 去除</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//定义list</span><br><span class="line">List&lt;User&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">User  user1 = new User();  </span><br><span class="line">User  user2 = new User(); </span><br><span class="line">user1.serName(&quot;111&quot;);</span><br><span class="line">user2.serName(&quot;222&quot;); </span><br><span class="line">list.add(user1);</span><br><span class="line">list.add(user2);</span><br><span class="line">//删除集合中某一元素值</span><br><span class="line">Iterator&lt;User&gt; iterator = list.iterator();</span><br><span class="line">while (iterator.hasNext())&#123;</span><br><span class="line">    User next = iterator.next();</span><br><span class="line">    String name = next.getName();</span><br><span class="line">    if (name.equals(&quot;222&quot;))&#123;</span><br><span class="line">        iterator.remove();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>缺点：虽然也能去除  但是列表改造成 Iterator 类型的了 ，还要转换。</p>
+<p><strong>方法二： stream 去除</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义list</span></span><br><span class="line">List&lt;User&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"><span class="type">User</span>  <span class="variable">user1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();  </span><br><span class="line"><span class="type">User</span>  <span class="variable">user2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(); </span><br><span class="line">user1.serName(<span class="string">&quot;111&quot;</span>);</span><br><span class="line">user2.serName(<span class="string">&quot;222&quot;</span>); </span><br><span class="line">list.add(user1);</span><br><span class="line">list.add(user2);</span><br><span class="line"></span><br><span class="line"><span class="comment">//删除集合中某一元素值</span></span><br><span class="line">list.stream().findFirst().map(vo -&gt; &#123;</span><br><span class="line">   <span class="keyword">if</span> (vo.getName().equals(<span class="string">&quot;222&quot;</span>))&#123;</span><br><span class="line">        list.remove(vo);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> vo;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>优点： 没有改变list格式并且更简洁。</p>
+<p>缺点：remove的时候会再次遍历整个list来找出 这个元素，性能会有一定的损耗。</p>
+<p><strong>方法三： stream +索引 去除</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义list</span></span><br><span class="line">List&lt;User&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"><span class="type">User</span>  <span class="variable">user1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();  </span><br><span class="line"><span class="type">User</span>  <span class="variable">user2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(); </span><br><span class="line">user1.serName(<span class="string">&quot;111&quot;</span>);</span><br><span class="line">user2.serName(<span class="string">&quot;222&quot;</span>); </span><br><span class="line">list.add(user1);</span><br><span class="line">list.add(user2);</span><br><span class="line"></span><br><span class="line"><span class="comment">//删除集合中某一元素值</span></span><br><span class="line">IntStream.range(<span class="number">0</span>,list.size()).filter(i-&gt;</span><br><span class="line">    list.get(i).getName().equals(<span class="string">&quot;222&quot;</span>)).</span><br><span class="line">boxed().findFirst().map(i-&gt;list.remove((<span class="type">int</span>)i));</span><br><span class="line"></span><br><span class="line">其中boxed为装箱操作</span><br></pre></td></tr></table></figure>
+
+<p>更简洁，高效。</p>
+<h2 id="如何使用Stream流进行分组"><a href="#如何使用Stream流进行分组" class="headerlink" title="如何使用Stream流进行分组"></a>如何使用Stream流进行分组</h2><p>Stream流-分组操作<br>方法1– groupingBy(Function)<br>方法2– groupingBy(Function,Collector)<br>方法3– groupingBy(Function,Supplier,Collector)</p>
+<h2 id="常用IO流，说一下它们的英文"><a href="#常用IO流，说一下它们的英文" class="headerlink" title="常用IO流，说一下它们的英文"></a>常用IO流，说一下它们的英文</h2><p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/1694616340225.png" alt="1694616340225" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/1694616358892.png" alt="1694616358892" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="反射是什么"><a href="#反射是什么" class="headerlink" title="反射是什么"></a>反射是什么</h2><p> 在Java中的反射机制是指在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法；并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为Java语言的反射机制</p>
+<h2 id="MySql中的事务"><a href="#MySql中的事务" class="headerlink" title="MySql中的事务"></a>MySql中的事务</h2><p> 事务四个基本特征或 ACID 特性。</p>
+<p>ACID，是指数据库管理系统（DBMS）在写入或更新资料的过程中，为保证事务（transaction）是正确可靠的，所必须具备的四个特性：原子性（atomicity，或称不可分割性）、一致性（consistency）、隔离性（isolation，又称独立性）、持久性（durability）。</p>
+<p>在数据库系统中，一个事务是指：由一系列数据库操作组成的一个<strong>完整的逻辑过程，要么全部执行成功，要么全部实行失败</strong>。例如银行转帐，从原账户扣除金额，以及向目标账户添加金额，这两个数据库操作的总和，构成一个完整的逻辑过程，不可拆分。这个过程被称为一个事务，具有ACID特性。</p>
+<p>1、Atomicity（原子性）：一个事务（transaction）中的所有操作，或者全部完成，或者全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。即，事务不可分割、不可约简。</p>
+<p>2、Consistency（一致性）：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设约束、触发器、级联回滚等。</p>
+<p>3、Isolation（隔离性）：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括未提交读（Read uncommitted）、提交读（read committed）、可重复读（repeatable read）和串行化（Serializable）。</p>
+<p>4、Durability（持久性）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</p>
+<h2 id="mysql三范式"><a href="#mysql三范式" class="headerlink" title="mysql三范式"></a>mysql三范式</h2><p>范式就是规范,就是关系型数据库在设计表时，要遵循的三个规范。</p>
+<p>要想满足第二范式必须先满足第一范式，要满足第三范式必须先满足第二范式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、第一范式：原子性，是指数据库表的每一列都是不可分割的基本数据项</span><br><span class="line">2、第二范式：唯一性，消除非主键依赖联合主键中的部分字段</span><br><span class="line">3、第三范式：独立性，消除传递依赖(非主键值不依赖于另一个非主键值，都应该依赖于主键)</span><br><span class="line">反三范式,有的时候为了效率，可以设置重复或者可以推导出的字段.</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Spring的事务传播特性（属性）"><a href="#Spring的事务传播特性（属性）" class="headerlink" title="Spring的事务传播特性（属性）"></a>Spring的事务传播特性（属性）</h2><p>当事务方法被另一个事务方法调用时，必须指定事务应该如何传播。例如:一个方法运行在了一个开启了事务的方法中时，当前方法是使用原来的事务还是开启一个新的事务。</p>
+<p>事务的传播行为可以由传播属性指定。Spring定义了7种类传播行为：</p>
+<p>Propagation</p>
+<p>PROPAGATION_REQUIRED：需要, 如果存在一个事务，则支持当前事务, 如果没有事务则开启(原来有就使用原来事物，没有就创建事物，一般Service的中的方法里面有<strong>更新</strong>的操作操作)</p>
+<p>PROPAGATION_SUPPORTS：支持, 如果存在一个事务，支持当前事务。如果没有事务，则非事务的执行（原来有就使用原来事物，没有就算了，一般Service的中的方法里面都是<strong>查询</strong>操作）</p>
+<p>PROPAGATION_MANDATORY: 必要的 如果已经存在一个事务，支持当前事务。如果没有一个活动的事务，则抛出异常。</p>
+<p>PROPAGATION_REQUIRES_NEW：总是开启一个新的事务。如果一个事务已经存在，则将这个存在的事务挂起。</p>
+<p>PROPAGATION_NOT_SUPPORTED：总是非事务地执行，并挂起任何存在的事务。</p>
+<p>PROPAGATION_NEVER：绝不 总是非事务地执行，如果存在一个活动事务，则抛出异常</p>
+<p>PROPAGATION_NESTED：嵌套的 如果有就嵌套、没有就开启事务</p>
+<p>事务传播属性可以在@Transactional注解的propagation属性中定义。</p>
+<h2 id="SpringBoot如何开启事务"><a href="#SpringBoot如何开启事务" class="headerlink" title="SpringBoot如何开启事务"></a>SpringBoot如何开启事务</h2><p>1 、在入口类使用注解@EnableTransactionManagement开启事务</p>
+<p>2、 在访问数据库的service方法上添加注解@<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Transactional&spm=1001.2101.3001.7020">Transactional</a>即可</p>
+<h2 id="MySql中索引失效的场景"><a href="#MySql中索引失效的场景" class="headerlink" title="MySql中索引失效的场景"></a>MySql中索引失效的场景</h2><p>使用LIKE进行左模糊或全模糊查询</p>
+<p>复合索引不满足最左匹配原则</p>
+<p>错误使用OR关键字</p>
+<p>索引列使用函数</p>
+<p>索引列参数运算，也属于这种情况的范畴。</p>
+<h2 id="Linux命令获取所有Java相关的进程"><a href="#Linux命令获取所有Java相关的进程" class="headerlink" title="Linux命令获取所有Java相关的进程"></a>Linux命令获取所有Java相关的进程</h2><p>   ps -ef | grep java</p>
+<h2 id="查看端口"><a href="#查看端口" class="headerlink" title="查看端口"></a>查看端口</h2><p><code>netstat -tunlp</code> 用于显示 tcp，udp 的端口和进程等相关情况。</p>
+<p>netstat 查看端口占用语法格式：</p>
+<p>复制代码</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -tunlp | <span class="keyword">grep</span> 端口号</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>-t (tcp) 仅显示tcp相关选项</li>
+<li>-u (udp)仅显示udp相关选项</li>
+<li>-n 拒绝显示别名，能显示数字的全部转化为数字</li>
+<li>-l 仅列出在Listen(监听)的服务状态</li>
+<li>-p 显示建立相关链接的程序名</li>
+</ul>
+<p>lsof(list open files)是一个列出当前系统打开文件的工具。<br>lsof 查看端口占用语法格式：</p>
+<p>lsof -i:端口号</p>
+<h2 id="Java8新特性，项目中哪里使用到了"><a href="#Java8新特性，项目中哪里使用到了" class="headerlink" title="Java8新特性，项目中哪里使用到了"></a>Java8新特性，项目中哪里使用到了</h2><p>1.Lambda表达式</p>
+<p>Lambda表达式是Java 8的一大亮点，它允许开发者以简洁的语法创建匿名函数。这种表达式能简化代码，提高代码可读性。</p>
+<p>2.Stream API</p>
+<p>Java 8引入了Stream API，提供了一种新的数据处理方式。Stream API使得对集合进行操作变得更加简洁高效。</p>
+<p>3.Optional类</p>
+<p>Java 8引入了Optional类，用于解决空指针异常问题。Optional类是一个容器，它可以包含一个非空对象，也可以为空。通过使用Optional类，我们可以避免空指针异常，提高代码的健壮性。</p>
+<p>4.Java 8提供了全新的日期和时间API，解决了原有日期和时间处理的不足。新API采用不可变对象设计，提供了清晰的API和更好的性能。</p>
+<h2 id="项目中有没有用lambda表达式"><a href="#项目中有没有用lambda表达式" class="headerlink" title="项目中有没有用lambda表达式"></a>项目中有没有用lambda表达式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.forEach(s -&gt; System.out.println(s));</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="springboot如何在启动时运行一个方法"><a href="#springboot如何在启动时运行一个方法" class="headerlink" title="springboot如何在启动时运行一个方法"></a>springboot如何在启动时运行一个方法</h2><p>1、实现 CommandLineRunner 接口</p>
+<p>项目初始化完毕后，才会调用方法，提供服务</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StartInit2</span> <span class="keyword">implements</span> <span class="title class_">CommandLineRunner</span> &#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">(String... args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;CommandLineRunner====================&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>2、实现 ApplicationRunner 接口</p>
+<p>同 CommandLineRunner。只是传参格式不一样。CommandLineRunner：没有任何限制；ApplicationRunner：key-value</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StartInit3</span> <span class="keyword">implements</span> <span class="title class_">ApplicationRunner</span> &#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">(ApplicationArguments args)</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;ApplicationRunner=================&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>3、实现 ApplicationListener 接口</p>
+<p>项目初始化完毕后，才会调用方法，提供服务。注意监听的事件，通常是 ApplicationStartedEvent 或者 ApplicationReadyEvent，其他的事件可能无法注入 bean。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StartInit4</span> <span class="keyword">implements</span> <span class="title class_">ApplicationListener</span>&lt;ApplicationStartedEvent&gt; &#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onApplicationEvent</span><span class="params">(ApplicationStartedEvent event)</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;ApplicationListener================ApplicationStartedEvent&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<p>如果监听的是 ApplicationStartedEvent 事件，则 ApplicationListener 一定会在 CommandLineRunner 和 ApplicationRunner 之前执行；<br>如果监听的是 ApplicationReadyEvent 事件，则 ApplicationListener 一定会在 CommandLineRunner 和 ApplicationRunner 之后执行；<br>顺序：<br>默认是 ApplicationRunner 先执行，如果双方指定了@Order 则按照 @Order的大小顺序执行，小的先执行。</p>
+<p>原理：</p>
+<p>SpringApplication 的run方法会执行afterRefresh方法。<br>afterRefresh方法会执行callRunners方法。<br>callRunners方法会调用所有实现ApplicationRunner和CommondLineRunner接口的方法callRunners方法会调用所有实现ApplicationRunner和CommondLineRunner接口的方法<br>4、@PostConstruct 注解</p>
+<p>在项目初始化过程中，就会调用此方法。如果业务逻辑执行很耗时，可能会导致项目启动失败。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StartInit</span> &#123;</span><br><span class="line"><span class="meta">@PostConstruct</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">()</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;@PostConstruct===============================&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>5、实现 InitializingBean 接口</p>
+<p>项目启动时，调用此方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StartInit6</span> <span class="keyword">implements</span> <span class="title class_">InitializingBean</span> &#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterPropertiesSet</span><span class="params">()</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;InitializingBean====================&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="JAVA中DATA和字符串互换"><a href="#JAVA中DATA和字符串互换" class="headerlink" title="JAVA中DATA和字符串互换"></a>JAVA中DATA和字符串互换</h2><p>一、日期转字符串（格式化）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line">  <span class="type">SimpleDateFormat</span> <span class="variable">sdf</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br><span class="line">  System.out.println(sdf.format(date));</span><br><span class="line">  sdf = <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);</span><br><span class="line">  System.out.println(sdf.format(date));</span><br><span class="line">  sdf = <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy年MM月dd日 HH:mm:ss&quot;</span>);</span><br><span class="line">  System.out.println(sdf.format(date));</span><br></pre></td></tr></table></figure>
+
+<p>二、字符串转日期（解析）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">string</span> <span class="operator">=</span> <span class="string">&quot;2019-03-19 19:23:16&quot;</span>;</span><br><span class="line">    <span class="type">SimpleDateFormat</span> <span class="variable">sdf</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);</span><br><span class="line">    System.out.println(sdf.parse(string));</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="int-数组转List的方法"><a href="#int-数组转List的方法" class="headerlink" title="int[]数组转List的方法"></a>int[]数组转List的方法</h2><p><strong>（1）创建一个List对象，将int[]数组中的元素逐个添加进去：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手动将数组元素逐个放入list中，进行转换</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> arrays</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> List&lt;Integer&gt; <span class="title function_">mannual2List</span><span class="params">(<span class="type">int</span>[] arrays)</span>&#123;</span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> array:arrays)&#123;</span><br><span class="line">            list.add(array);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>（2）利用Arrays.asList方法进行转换，注意asList方法返回值是Object类型的：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注意Arrays.asList的入参要是对象类型，不能是基本类型，基本类型要转换成对象类型才可以</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> arrays 对象数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> List&lt;Integer&gt; <span class="title function_">useAsList2List</span><span class="params">(Integer[] arrays)</span>&#123;</span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(Arrays.asList(arrays));</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>（3）利用Stream进行转换：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 这里同样也是要使用对象类型，不能直接使用基本类型</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> arrays</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> List&lt;Integer&gt; <span class="title function_">useArraysStream2List</span><span class="params">(Integer[] arrays)</span>&#123;</span><br><span class="line">       List&lt;Integer&gt; list = Arrays.stream(arrays).collect(Collectors.toList());</span><br><span class="line">       <span class="keyword">return</span> list;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="List转int-数组的方法"><a href="#List转int-数组的方法" class="headerlink" title="List转int[]数组的方法"></a>List转int[]数组的方法</h2><p>（1）暴力手动法：创建一个数组，将List中的元素逐个添加到数组中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手动创建数组，将list中的元素逐个添加到int[]数组中</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> list</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span>[] mannualList2Array(List&lt;Integer&gt; list)&#123;</span><br><span class="line">        <span class="type">int</span>[] res = <span class="keyword">new</span> <span class="title class_">int</span>[list.size()];</span><br><span class="line">        <span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> num:list)&#123;</span><br><span class="line">            res[i++]=num;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>（2）直接使用List的toArray方法，该类型参数传入引用类型：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Integer[] list2Array(List&lt;Integer&gt; list)&#123;</span><br><span class="line">        Integer[] integers = list.toArray(<span class="keyword">new</span> <span class="title class_">Integer</span>[<span class="number">0</span>]);<span class="comment">//传入参数，表示强转</span></span><br><span class="line">        <span class="keyword">return</span> integers;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>（3）使用stream将list转换成数组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span>[] useStreamlist2Array(List&lt;Integer&gt; list)&#123;</span><br><span class="line">        <span class="comment">//下面三行代码都可以完成这个操作</span></span><br><span class="line"><span class="comment">//        int[] arrays = list.stream().mapToInt(Integer::intValue).toArray();</span></span><br><span class="line">        <span class="comment">//使用lambda表达式</span></span><br><span class="line"><span class="comment">//        int[] arrays = list.stream().mapToInt((Integer i)-&gt;i).toArray();</span></span><br><span class="line">        <span class="comment">//使用lambda表达式；先使用filter过滤</span></span><br><span class="line">        <span class="type">int</span>[] arrays = list.stream().filter(integer -&gt; integer!=<span class="literal">null</span>).mapToInt(i-&gt;i).toArray();</span><br><span class="line">        <span class="keyword">return</span> arrays;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Arrays-asList有什么限制"><a href="#Arrays-asList有什么限制" class="headerlink" title="Arrays.asList有什么限制"></a>Arrays.asList有什么限制</h2><p>使用<code>Arrays.asList()</code>方法将数组转换为集合时，生成的集合是一个固定大小的列表（List），它将数组作为底层数据存储。由于数组的长度是固定的，因此不能对该集合进行结构性修改，如添加或删除元素。</p>
+<p>这样的限制是因为<code>Arrays.asList()</code>方法返回的集合实际上是一个视图（View），它将数组作为其后备存储，并且对底层数组的任何更改都会直接反映在集合中。但是，数组的大小不可变，无法动态调整，因此添加或删除元素会导致不一致的结果。</p>
+<p>为了避免在使用<code>Arrays.asList()</code>方法转换数组时出现意外的行为和异常，Java规范明确禁止使用该返回的集合进行修改操作。</p>
+<h2 id="springboot的starter是怎么自动整合到配置中的"><a href="#springboot的starter是怎么自动整合到配置中的" class="headerlink" title="springboot的starter是怎么自动整合到配置中的"></a>springboot的starter是怎么自动整合到配置中的</h2><p>Spring Boot中的自动配置主要是通过@Configuration注解实现的，@Configuration注解用于指示Spring容器使用一个类作为配置类，类中的@Bean方法可以用来定义Spring组件。</p>
+<p>Spring Boot的自动配置机制通过在classpath中查找META-INF&#x2F;spring.factories文件来实现。该文件中定义了Spring Boot应用程序所需的所有自动配置类。当应用程序启动时，Spring Boot框架会自动加载并运行这些自动配置类。</p>
+<p>在加载自动配置类的过程中，Spring Boot框架会对每个@Configuration注解的类进行解析，并通过条件判断决定是否需要执行该类中的@Bean方法。如果条件满足，则会自动创建该组件，并将其加入到Spring容器中。</p>
+<h2 id="springboot自动配置"><a href="#springboot自动配置" class="headerlink" title="springboot自动配置"></a>springboot自动配置</h2><p><code>@SpringBootApplication</code>等同于下面三个注解：</p>
+<ul>
+<li><code>@SpringBootConfiguration</code></li>
+<li><code>@EnableAutoConfiguration</code></li>
+<li><code>@ComponentScan</code></li>
+</ul>
+<p>其中<code>@EnableAutoConfiguration</code>是关键(启用自动配置)，内部实际上就去加载<code>META-INF/spring.factories</code>文件的信息，然后筛选出以<code>EnableAutoConfiguration</code>为key的数据，加载到IOC容器中，实现自动配置功能！</p>
+<h2 id="stream流怎么进行集合转为map"><a href="#stream流怎么进行集合转为map" class="headerlink" title="stream流怎么进行集合转为map"></a>stream流怎么进行集合转为map</h2><p>（stream流）List转Map的方法如下<br>第一种（会出现键重复异常）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//以id为主键转为map</span></span><br><span class="line">Map&lt;Long, User&gt; map = list.stream().collect(Collectors.toMap(User::getId,Function.identity()));</span><br></pre></td></tr></table></figure>
+
+<p>第二种（针对第一种方法会出现情况）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//给出key重复时，使用哪个key作为主键，以下代码中的(key1, key2) -&gt; key2)代表key1和key2键重复时返回key2做主键</span></span><br><span class="line">Map&lt;Long, User&gt; map = list.stream().collect(Collectors.toMap(User::getId, Function.identity(), (key1, key2) -&gt; key2));</span><br></pre></td></tr></table></figure>
+
+<p>第三种（只返回对象里某个属性时）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不想返回对象，只返回对象里某个属性时 采用这种方式</span></span><br><span class="line">Map&lt;Long, String&gt; map = list.stream().collect(Collectors.toMap(User::getId, User::getAge, (key1, key2) -&gt; key2));</span><br></pre></td></tr></table></figure>
+
+<p>第四种（以某个属性分组）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, List&gt; map = list.stream().collect(Collectors.groupingBy(User::getId));</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="redis常用的命令"><a href="#redis常用的命令" class="headerlink" title="redis常用的命令"></a>redis常用的命令</h2><p>1.字符串类型<code>string</code></p>
+<p>存储：<code>set key value</code></p>
+<p>获取：<code>get key</code></p>
+<p>删除：<code>del key</code></p>
+<p>批量添加：<code>mset k1 v1 [k2 v2 k3 v3]</code></p>
+<p>批量取值：<code>mget k1 [k2 k3...]</code></p>
+<p>在<code>key</code>对应的<code>value</code>上自增 +1：<code>incr key</code></p>
+<p>2.哈希类型hash</p>
+<ol>
+<li><p>向<code>key</code>对应的<code>hash</code>中添加键值对：<code>hset key field value</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hset Person username Peter</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hset Person age 10</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hset Person address Beijing</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取指定的<code>field</code>对应的值：<code>hget key field</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hget Person age</span><br><span class="line"><span class="string">&quot;10&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; hget Person username</span><br><span class="line"><span class="string">&quot;Peter&quot;</span>hdel </span><br><span class="line">127.0.0.1:6379&gt; hget Person address</span><br><span class="line"><span class="string">&quot;Beijing&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>向<code>key</code>对应的<code>hash</code>结构中批量添加键值对：<code>hmset key f1 v1 [f2 v2 ...]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hmset person name zs age 10 addr bj</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>key</code>对应的<code>hash</code>中的<code>field</code>对应<code>value</code>上加v：<code>hincrby key field v</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hincrby person age 1</span><br><span class="line">(<span class="built_in">integer</span>) 11</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取所有的<code>field</code>和<code>value</code>：<code>hgetall key</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hgetall Person</span><br><span class="line">1) <span class="string">&quot;username&quot;</span></span><br><span class="line">2) <span class="string">&quot;Peter&quot;</span></span><br><span class="line">3) <span class="string">&quot;age&quot;</span></span><br><span class="line">4) <span class="string">&quot;10&quot;</span></span><br><span class="line">5) <span class="string">&quot;address&quot;</span></span><br><span class="line">6) <span class="string">&quot;Beijing&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>3.列表类型list</p>
+<blockquote>
+<p>可以添加一个元素到列表的头部（左侧）或者尾部（右侧），<strong>允许元素重复</strong>。</p>
+<p>元素是有顺序的，索引从<code>0</code>开始</p>
+<p>同侧存取：实现了堆栈结构，后进先出；</p>
+<p>异侧存取：实现了队列结构，先进先出。</p>
+<p><code>left</code>左</p>
+<p><code>right</code>右</p>
+<p><code>push</code>推入</p>
+<p><code>pop</code>弹出</p>
+<ol>
+<li><p>将元素加入列表左侧：<code>lpush key value</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpush username tom</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; lpush username John</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将元素加入列表右侧：<code>rpush key value</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpush username Smith</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; rpush username Lucy</span><br><span class="line">(<span class="built_in">integer</span>) 4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除列表最左边的元素，并将元素返回：<code>lpop key</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpop username</span><br><span class="line"><span class="string">&quot;John&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; lrange username 0 -1</span><br><span class="line">1) <span class="string">&quot;tom&quot;</span></span><br><span class="line">2) <span class="string">&quot;Smith&quot;</span></span><br><span class="line">3) <span class="string">&quot;Lucy&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除列表最右边的元素，并将元素返回：<code>rpop key</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; rpop username</span><br><span class="line"><span class="string">&quot;Lucy&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; lrange username 0 -1</span><br><span class="line">1) <span class="string">&quot;tom&quot;</span></span><br><span class="line">2) <span class="string">&quot;Smith&quot;</span></span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取：<code>lrange key start end</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 0：第0个元素</span></span><br><span class="line"><span class="comment"># -1：最后一个元素</span></span><br><span class="line">127.0.0.1:6379&gt; lrange username 0 -1</span><br><span class="line">1) <span class="string">&quot;John&quot;</span></span><br><span class="line">2) <span class="string">&quot;tom&quot;</span></span><br><span class="line">3) <span class="string">&quot;Smith&quot;</span></span><br><span class="line">4) <span class="string">&quot;Lucy&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; lrange username 0 1</span><br><span class="line">1) <span class="string">&quot;John&quot;</span></span><br><span class="line">2) <span class="string">&quot;tom&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看key对应的列表中index索引对应的值： <code>lindex key index</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lindex username 0</span><br><span class="line"><span class="string">&quot;zl&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取key对应的列表中的元素个数：<code>llen key</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; llen username</span><br><span class="line">(<span class="built_in">integer</span>) 4</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从key对应的列表中截取key在[start,stop]范围的值，不在此范围的数据一律被清除掉：<code>ltrim key start stop</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ltrim username 1 2</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; llen username</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; lrange username 0 -1</span><br><span class="line">1) <span class="string">&quot;ww&quot;</span></span><br><span class="line">2) <span class="string">&quot;ls&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从k1右侧取出一个数据存放到k2的左侧：<code>rpoplpush k1 k2</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpush test1 aaa bbb ccc</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; lpush test2 mmm nnn</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; rpoplpush test2 test1</span><br><span class="line"><span class="string">&quot;mmm&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; lrange test1 0 -1</span><br><span class="line">1) <span class="string">&quot;mmm&quot;</span></span><br><span class="line">2) <span class="string">&quot;ccc&quot;</span>f<span class="string">&#x27;l</span></span><br><span class="line"><span class="string">3) &quot;bbb&quot;</span></span><br><span class="line"><span class="string">4) &quot;aaa&quot;</span></span><br><span class="line"><span class="string">127.0.0.1:6379&gt; lrange test2 0 -1</span></span><br><span class="line"><span class="string">1) &quot;nnn&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改数据：<code>lset key index value</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lrange username 0 -1</span><br><span class="line">1) <span class="string">&quot;ww&quot;</span></span><br><span class="line">2) <span class="string">&quot;ls&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; lset username 0 zs</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; lrange username 0 -1</span><br><span class="line">1) <span class="string">&quot;zs&quot;</span></span><br><span class="line">2) <span class="string">&quot;ls&quot;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+</blockquote>
+<h2 id="redis在项目中如何使用"><a href="#redis在项目中如何使用" class="headerlink" title="redis在项目中如何使用"></a>redis在项目中如何使用</h2><p><code>@Cacheable</code>标记在一个方法上，也可以标记在一个类上。主要是缓存标注对象的返回结果，标注在方法上缓存该方法的返回值，标注在类上，缓存该类所有的方法返回值。 参数：</p>
+<ul>
+<li><code>value</code>缓存名</li>
+<li><code>key</code>缓存键值</li>
+<li><code>condition</code>满足缓存条件</li>
+<li><code>unless</code>否决缓存条件</li>
+</ul>
+<p><code>@CacheEvict</code>:从缓存中移除相应数据</p>
+<p><code>@CachePut</code>：方法支持缓存功能。与<code>@Cacheable</code>不同的是使用<code>@CachePut</code>标注的方法在执行前不会去检查缓存中是否存在之前执行过的结果，而是每次都会执行该方法，并将执行结果以键值对的形式存入指定的缓存中。</p>
+<p><code>@Caching</code>：多个<code>Cache</code>注解使用，比如新增用户时，删除用户属性等需要删除或者更新多个缓存时，集合以上三个注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Cacheable(value = &quot;users&quot;, key = &quot;&#x27;users&#x27;&quot;)</span></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> List&lt;User&gt; <span class="title function_">findAll</span><span class="params">()</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> userMapper.findAll();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Caching(</span></span><br><span class="line"><span class="meta">           put = @CachePut(value = &quot;user&quot;, key = &quot;#user.id&quot;),</span></span><br><span class="line"><span class="meta">           evict = @CacheEvict(value = &quot;users&quot;, key = &quot;&#x27;users&#x27;&quot;)</span></span><br><span class="line"><span class="meta">   )</span></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> User <span class="title function_">add</span><span class="params">(User user)</span> &#123;</span><br><span class="line">       userMapper.add(user);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> user;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="stream流中Collector-toMap方法与groupby的区别"><a href="#stream流中Collector-toMap方法与groupby的区别" class="headerlink" title="stream流中Collector.toMap方法与groupby的区别"></a>stream流中Collector.toMap方法与groupby的区别</h2><p>Collectors.toMap用法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Student&gt; studentList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">studentList.add(<span class="keyword">new</span> <span class="title class_">Student</span>(<span class="number">1</span>, <span class="string">&quot;小福贵&quot;</span>));</span><br><span class="line">studentList.add(<span class="keyword">new</span> <span class="title class_">Student</span>(<span class="number">2</span>, <span class="string">&quot;图图&quot;</span>));</span><br><span class="line">studentList.add(<span class="keyword">new</span> <span class="title class_">Student</span>(<span class="number">3</span>, <span class="string">&quot;喜羊羊&quot;</span>));</span><br><span class="line">studentList.add(<span class="keyword">new</span> <span class="title class_">Student</span>(<span class="number">3</span>, <span class="string">&quot;懒羊羊&quot;</span>));</span><br><span class="line"></span><br><span class="line">Map&lt;Integer, Student&gt; map = studentList.stream().collect(Collectors.toMap(Student::getId, Function.identity(), (a, b)-&gt; b));</span><br><span class="line"></span><br><span class="line">System.out.println(JSON.toJSONString(map));</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;1&quot;: &#123;</span><br><span class="line">    &quot;id&quot;: 1,</span><br><span class="line">    &quot;name&quot;: &quot;小福贵&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;2&quot;: &#123;</span><br><span class="line">    &quot;id&quot;: 2,</span><br><span class="line">    &quot;name&quot;: &quot;图图&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;3&quot;: &#123;</span><br><span class="line">    &quot;id&quot;: 3,</span><br><span class="line">    &quot;name&quot;: &quot;懒羊羊&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>第一个参数：用来生成key的值<br>第二个参数：用来生成value的值<br>v-&gt;v 表示将原来的对象作为value值<br>Function.identity()等价于v-&gt;v</p>
+<p>第三个参数：(a, b)-&gt; b，key冲突时，取b所对应的value值（key冲突，不写该参数会报错）<br>Collectors.groupingBy用法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, List&lt;Student&gt;&gt; groupingBy = studentList.stream().collect(Collectors.groupingBy(Student::getId));</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;1&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;: 1,</span><br><span class="line">      &quot;name&quot;: &quot;小福贵&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;2&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;: 2,</span><br><span class="line">      &quot;name&quot;: &quot;图图&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;3&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;: 3,</span><br><span class="line">      &quot;name&quot;: &quot;喜羊羊&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;: 3,</span><br><span class="line">      &quot;name&quot;: &quot;懒羊羊&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与toMap区别：<br>toMap是1:1的k-v结构，groupingBy是1:n的k-v结构</p>
+<h2 id="zset"><a href="#zset" class="headerlink" title="zset"></a>zset</h2><p>翻译过来是 Redis 中有两种数据结构来支持 zset 的功能，一个是 hash table ，一个是 skip list。</p>
+<p>排行榜</p>
+<h2 id="深拷贝-vs-浅拷贝"><a href="#深拷贝-vs-浅拷贝" class="headerlink" title="深拷贝 vs 浅拷贝"></a>深拷贝 vs 浅拷贝</h2><p>浅拷贝：对基本数据类型进行值传递，对引用数据类型进行引用传递的拷贝，此为浅拷贝。</p>
+<p>深拷贝：对基本数据类型进行值传递，对引用数据类型，创建一个新的对象，并复制其内容，此为深拷贝。</p>
+<h2 id="vim中怎么进行撤销"><a href="#vim中怎么进行撤销" class="headerlink" title="vim中怎么进行撤销"></a>vim中怎么进行撤销</h2><p>要撤消Vi和Vim中的更改，可以使用<code>u</code>，<code>:u</code>或<code>:undo</code>命令：</p>
+<ul>
+<li>如果当前Vi&#x2F;Vim处于插入或其他任何模式，可以按<code>Esc</code>键返回到正常模式，也称为命令模式。</li>
+<li>键入<code>u</code>撤消上一次更改。 在Vim中，<code>u</code>命令还接受量词。 例如，如果要撤消最后4个更改，则可以使用<code>4u</code>。 确保您输入的是小写的<code>u</code>，而不是大写的<code>U</code>命令，这会撤消一行中所有的最新更改。 如果您不小心输入了U，则可以使用<code>u</code>撤消更改。</li>
+</ul>
+<h2 id="vim怎么进行保存"><a href="#vim怎么进行保存" class="headerlink" title="vim怎么进行保存"></a>vim怎么进行保存</h2><p>:w 保存文件但不退出vi<br>:w file 将修改另外保存到file中，不退出vi<br>:w! 强制保存，不推出vi<br>:wq 保存文件并退出vi<br>:wq! 强制保存文件，并退出vi</p>
+<h2 id="Linux查看日志文件"><a href="#Linux查看日志文件" class="headerlink" title="Linux查看日志文件"></a>Linux查看日志文件</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f filename</span><br></pre></td></tr></table></figure>
+
+<p> tail -f server.log实时展示日志末尾内容，默认最后10行,相当于增加参数 -n 10</p>
+<blockquote>
+<p>tail -f server.log</p>
+</blockquote>
+<h2 id="Linux运行jar包时，如何把日志打印到某一个文件中"><a href="#Linux运行jar包时，如何把日志打印到某一个文件中" class="headerlink" title="Linux运行jar包时，如何把日志打印到某一个文件中"></a>Linux运行jar包时，如何把日志打印到某一个文件中</h2><p><strong>java -jar xxxx.jar &amp;</strong></p>
+<p>**&amp;**表示在后台运行。当窗口关闭时，程序中止运行。</p>
+<p><strong>nohup java -jar xxxx.jar &amp;</strong></p>
+<p><strong>nohup</strong> 意思是<strong>不挂断</strong>运行命令，当账户退出或终端关闭时，程序仍然运行。缺省情况下该作业的所有输出被<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E9%87%8D%E5%AE%9A%E5%90%91&spm=1001.2101.3001.7020">重定向</a>到<strong>nohup.out</strong>的文件中</p>
+<p><strong>nohup java -jar xxxx.jar &gt;&#x2F;log.file &amp;</strong> </p>
+<p>将日志输出到<strong>log.file</strong>指定的文件内。</p>
+<h2 id="两个Integer怎么判断是否相等，Integer与Int判断相等"><a href="#两个Integer怎么判断是否相等，Integer与Int判断相等" class="headerlink" title="两个Integer怎么判断是否相等，Integer与Int判断相等"></a>两个Integer怎么判断是否相等，Integer与Int判断相等</h2><p><strong>关于&#x3D;&#x3D;（双等号）比较</strong><br>——对于基本数据类型，（双等号）比较的是值，而对于包装类型，（双等号）比较的则是2个对象的内存地址。<br>——-如果包装类和基本类型比较时，将包装类拆箱后，再进行基本类型的值比较。<br><strong>关于equals</strong><br>——两个包装类比较时，是比较的是包装类型的基本类型的值<br>——包装类和基本类型比较时，基本类型自动装箱后，再比较基本类型的值。<br>————–equal是方法比较的是真正的值。</p>
+<h2 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h2><p>缓存穿透是指缓存和数据库中都没有的数据，而用户不断发起请求，如发起为id为“-1”的数据或id为特别大不存在的数据。这时的用户很可能是攻击者，攻击会导致数据库压力过大。</p>
+<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/68bbd3a986614d00b70756a46a259c91.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>解决方案：</p>
+<p>接口层增加校验，如用户鉴权校验，id做基础校验，id&lt;&#x3D;0的直接拦截；<br>从缓存取不到的数据，在数据库中也没有取到，这时也可以将key-value对写为key-null，缓存有效时间可以设置短一些，如30秒（设置太长会导致正常情况也没法使用）。这样可以防止攻击用户反复用同一个id暴力攻击<br>使用布隆过滤器，需要安装redis组件<br>使用布谷鸟滤器，布谷鸟过滤器是布隆过滤器的升级版，需要安装redis组件<br>在客户端自行实现布隆过滤算法；</p>
+<h2 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h2><p>缓存击穿指的是大量的key在同一时间过期，但是又有大量的请求需要用到这些已经过期的key，那么程序在redis找不到数据，就会去数据库里查询，数据库处理大量的请求的同时导致压力瞬间增大，造成压力过大，甚至导致崩溃；</p>
+<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/3633ec8aae3e443e847131bfd1585c35.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>解决方案</p>
+<p>设置key值永不过期<br>将key的过期时间设为随机<br>使用布隆过滤器或者布谷鸟过滤器<br>使用分布式锁，当多个key过期时，同一时间只有一个查询请求下发到数据库，其他的key等待一个个地轮流查，就可以避免数据库压力过大的问题；</p>
+<h2 id="什么是jvm？"><a href="#什么是jvm？" class="headerlink" title="什么是jvm？"></a>什么是jvm？</h2><p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/java-runtime-data-areas-jdk1.8.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/stack-area.png" alt="Java 虚拟机栈" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/local-variables-table.png" alt="局部变量表" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/1694673907900.png" alt="1694673907900" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/1694673921181.png" alt="1694673921181" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>G1 收集器在后台维护了一个优先列表，每次根据允许的收集时间，优先选择回收价值最大的 Region(这也就是它的名字 Garbage-First 的由来)</strong> 。这种使用 Region 划分内存空间以及有优先级的区域回收方式，保证了 G1 收集器在有限时间内可以尽可能高的收集效率（把内存化整为零）。</p>
+<p><strong>从 JDK9 开始，G1 垃圾收集器成为了默认的垃圾收集器。</strong></p>
+<h2 id="什么情况下GC"><a href="#什么情况下GC" class="headerlink" title="什么情况下GC"></a>什么情况下GC</h2><p>GC又分为 minor GC 和 Full GC (也称为 Major GC )</p>
+<p>Minor GC触发条件：当Eden区满时，触发Minor GC。</p>
+<p>Full GC触发条件：</p>
+<p>a.调用System.gc时，系统建议执行Full GC，但是不必然执行</p>
+<p>b.老年代空间不足</p>
+<p>c.方法区空间不足</p>
+<p>d.通过Minor GC后进入老年代的平均大小大于老年代的可用内存</p>
+<p>e.由Eden区、From Space区向To Space区复制时，对象大小大于To Space可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小</p>
+<p>Minor GC：</p>
+<p>新生代GC，指发生在新生代的垃圾收集动作，因为Java对象大多都具备朝生熄灭的特点，所以Minor GC十分频繁，回收速度也较快。</p>
+<p>Major GC：</p>
+<p>老年代GC，指发生在老年代的垃圾收集动作，当出现Major GC时，一般也会伴有至少一次的Minor GC(并非绝对，例如Parallel Scavenge收集器会单独直接触发Major GC的机制)。Major GC的速度一般会比Minor GC慢十倍以上。</p>
+<h2 id="使用拦截器进行登录校验怎么做的"><a href="#使用拦截器进行登录校验怎么做的" class="headerlink" title="使用拦截器进行登录校验怎么做的"></a>使用拦截器进行登录校验怎么做的</h2><p>1、有一个登陆页面，需要写一个controller访问页面。<br>2、登陆页面有一提交表单的动作。需要在controller中处理。判断用户名密码是否正确。如果正确，向session中写入用户信息。返回登陆成功。<br>3、拦截用户请求，判断用户是否登陆。如果用户已经登陆。放行， 如果用户未登陆，跳转到登陆页面</p>
+<h2 id="用户在一台电脑上登录后，在其他电脑上使用相同的用户登录会是什么情况，怎么处理"><a href="#用户在一台电脑上登录后，在其他电脑上使用相同的用户登录会是什么情况，怎么处理" class="headerlink" title="用户在一台电脑上登录后，在其他电脑上使用相同的用户登录会是什么情况，怎么处理"></a>用户在一台电脑上登录后，在其他电脑上使用相同的用户登录会是什么情况，怎么处理</h2><ul>
+<li>利用map的key-value数据结构，key可以重复，value不能重复的特性，将用户名和sessionid绑定存储起来。</li>
+<li>首次登录在拦截器里面放行，登录成功将用户名和sessionid存储起来，当第二次登录时，用户名相同，sessionid不同的话则去登录，后面执行登录方法，发前一个账号和sessionid删除，然后把后一个的用户名和sessionid重新存起来，如果第二次登录时用户名相同，sessionid也相同，就直接放行，相当于单点登录。同一个会话sessionid是相同的，不同的会话sessionid肯定不同。</li>
+<li>删除了sessionid的账号，只有点击一个操作后就会下线。</li>
+</ul>
+<h2 id="什么是数据清洗，怎么做的"><a href="#什么是数据清洗，怎么做的" class="headerlink" title="什么是数据清洗，怎么做的"></a>什么是数据清洗，怎么做的</h2><ol>
+<li><p>加载数据</p>
+</li>
+<li><p>去除重复数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title function_">removeDuplicates</span><span class="params">(List&lt;String&gt; data)</span> &#123;</span><br><span class="line">      Set&lt;String&gt; uniqueData = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;(data);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(uniqueData);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>去除不完整数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title function_">removeMissingValues</span><span class="params">(List&lt;String&gt; data)</span> &#123;</span><br><span class="line">        data.removeIf(String::isEmpty); <span class="comment">// 删除空字符串</span></span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Spring和springboot的区别"><a href="#Spring和springboot的区别" class="headerlink" title="Spring和springboot的区别"></a>Spring和springboot的区别</h2><p>在我看来Spring Boot框架是对Spring框架的补充，它消除了Spring框架配置XML的麻烦事，完善了Spring框架的开发环境，使我们可以更加高效的完成编程</p>
+<p>我们使用Spring创建Web程序时需要导入几个Maven依赖，而Spring Boot只需要一个Maven依赖来创建Web程序，并且Spring Boot还把我们最常用的依赖都放到了一起，现在的我们只需要spring-boot-starter-web这一个依赖就可以完成一个简单的Web应用。</p>
+<p>以前用Spring的时候需要XML文件配置开启一些功能，现在Spring Boot不用XML配置了，只需要写一个配置类（@Configuration和继承对应的接口）就可以继续配置。</p>
+<p>Spring Boot会通过启动器开启自动装配功能以@EnableAutoConfiguration扫描在spring.factories中的配置，然后通过@XxxxautoConfiguration进行扫描和配置所需要的Bean，自动的扫描Spring<br>Boot项目引入的Maven依赖，只有用到的才会被创建成Bean，然后放到IOC容器内。</p>
+<h2 id="单线程和线程池在业务层面的应用"><a href="#单线程和线程池在业务层面的应用" class="headerlink" title="单线程和线程池在业务层面的应用"></a>单线程和线程池在业务层面的应用</h2><p>可见，多线程可以同时处理多个计算，计算能力似乎是成倍成比例上涨的，但是它有一个问题就是多个运算必须独立，比如：</p>
+<p>1+2&#x3D;a，a+3&#x3D;b</p>
+<p>这种计算，你不知道a就没法计算b，这种情况下就没办法多线程计算了。</p>
+<p>再就是“竞争状态”：</p>
+<p>就是说多个线程互相等待对方结束，或者等待对方释放资源。单线程的话所有的操作一定会是一个接一个的完成，所以不存在这个状况。但如果多线程的话，调度没有做好就很容易发生这种事情，比如不小心同时运行了本不应该同时运行的两个线程，或者其中一个线程没有在预定时间内结束就启动了第二个线程。</p>
+<p>单线程的好处就是易于编程，不需要考虑太多状况，缺点是效率低。</p>
+<p>多线程的好处是效率高，性能高，但是不是所有的运算都可以被并行化，而且容易出现各种意外的稀奇古怪的bug。</p>
+<h2 id="介绍一下jdk，jre，jvm"><a href="#介绍一下jdk，jre，jvm" class="headerlink" title="介绍一下jdk，jre，jvm"></a>介绍一下jdk，jre，jvm</h2><pre><code>  JDK(Java Development Kit) 是 Java 语言的软件开发工具包(SDK)。**在JDK的安装目录下有一个jre目录**，里面有两个文件夹bin和lib，在这里可以认为**bin里的就是jvm，lib中则是jvm工作所需要的类库，而jvm和 lib合起来就称为jre。**
+</code></pre>
+<p>​	然后我们来看JRE</p>
+<p>​	JRE（Java Runtime Environment，Java运行环境），<strong>包含JVM标准实现及Java核心类库。</strong>JRE是Java运行环境，并不是一个开发环境，所以没有包含任何开发工具（如编译器和调试器）</p>
+<p>最后JVM也一目了然了</p>
+<p>​	JVM是Java Virtual Machine（Java虚拟机）的缩写，JVM是一种用于计算设备的规范，它是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。</p>
+<h2 id="安装java都安装了什么Jvm的类加载器"><a href="#安装java都安装了什么Jvm的类加载器" class="headerlink" title="安装java都安装了什么Jvm的类加载器"></a>安装java都安装了什么Jvm的类加载器</h2><p>JVM支持两种类型的类加载器：</p>
+<p>1、  引导类加载器（Bootstrap ClassLoader）(启动类加载器)</p>
+<p>2、  自定义类加载器（User-Defined ClassLoader）</p>
+<p>ExtClassLoader 拓展加载器 和 AppClassLoader 应用程序类加载器 和自定义类加载器 都是属于自定义类加载器</p>
+<p>​	为什么 ExtClassLoader 和 AppClassLoader 都属于自定义加载器？</p>
+<p>规范定义：所有派生于ClassLoader的类加载器都划分为自定义类加载器，所以ExtClassLoader和AppClassLoader也归类到自定义类加载器。</p>
+<p>BootstrapClassLoader是用C、C++语言写的，其余都是Java写的。</p>
+<h2 id="什么是DCHP"><a href="#什么是DCHP" class="headerlink" title="什么是DCHP"></a>什么是DCHP</h2><p>DHCP是用来<strong>分配IP地址</strong>的。</p>
+<p>NAT是用来<strong>转换IP地址</strong>的。</p>
+<h2 id="TCP和UDP的区别"><a href="#TCP和UDP的区别" class="headerlink" title="TCP和UDP的区别"></a>TCP和UDP的区别</h2><h4 id="TCP是面向连接的，UDP是无连接的"><a href="#TCP是面向连接的，UDP是无连接的" class="headerlink" title="TCP是面向连接的，UDP是无连接的"></a>TCP是面向连接的，UDP是无连接的</h4><h4 id="TCP是可靠的，UDP是不可靠的"><a href="#TCP是可靠的，UDP是不可靠的" class="headerlink" title="TCP是可靠的，UDP是不可靠的"></a>TCP是可靠的，UDP是不可靠的</h4><h2 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h2><p>接口是行为的抽象，是一种行为的规范，接口是like a 的关系；抽象是对类的抽象，是一种模板设计，抽象类是is a 的关系。<br>接口没有构造方法，而抽象类有构造方法，其方法一般给子类使用<br>接口只有定义，不能有方法的实现，java 1.8中可以定义default方法体，而抽象类可以有定义与实现，方法可在抽象类中实现。<br>抽象体现出了继承关系，继承只能单继承。接口提现出来了实现的关系，实现可以多实现。接口强调特定功能的实现，而抽象类强调所属关系。<br>接口成员变量默认为public static final，必须赋初值，不能被修改；其所有的成员方法都是public abstract的。抽象类中成员变量默认default，可在子类中被重新定义，也可被重新赋值；抽象方法被abstract修饰，不能被private、static、synchronized和native等修饰，必须以分号结尾，不带花括号。 </p>
+<h2 id="说说你对Java内存模型（JMM）的理解，为什么要用JMM"><a href="#说说你对Java内存模型（JMM）的理解，为什么要用JMM" class="headerlink" title="说说你对Java内存模型（JMM）的理解，为什么要用JMM"></a><strong>说说你对Java内存模型（JMM）的理解，为什么要用JMM</strong></h2><p>  本身随着CPU和内存的发展速度差异的问题，导致CPU的速度远快于内存，所以现在的CPU加⼊了⾼速缓存，⾼速缓存⼀般可以分为L1、L2、L3三级缓存。基于上⾯的例⼦我们知道了这导致了缓存⼀致性的问题，所以加⼊了缓存⼀致性协议，同时导致了内存可⻅性的问题，⽽编译器和CPU的重排序导致了原⼦性和有序性的问题，JMM内存模型正是对多线程操作下的⼀系列规范约束，通过JMM我们才屏蔽了不同硬件和操作系统内存的访问差异，这样保证了Java程序在不同的平台下达到⼀致的内存访问效果，同时也是保证在⾼效并发的时候程序能够正确执⾏。</p>
+
+</article>
+    
+    
+
+</div>
+<div id="post-next-prev" class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/" class="trm-anima-link">
+                    面试经验
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/09/13</li>
+                <li>20:56</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.0.9
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  
+  <!-- Plugin -->
+
+
+
+
+    
+    
+<script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.0.9"></script>
+
+</body>
+
+</html>
