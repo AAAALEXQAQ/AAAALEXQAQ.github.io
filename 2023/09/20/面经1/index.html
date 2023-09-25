@@ -10,7 +10,7 @@
 <meta name="description" content="面试经验2SpringBoot的主入口注解@SpringBootApplication 什么情况下使用responsebody，通常和谁结合使用@responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP response body中。比如异步获取json数据，加上@responsebody后，会直接返回json数据。 @RestController是@Controller和@R">
 <meta property="og:type" content="article">
 <meta property="og:title" content="面试经验2">
-<meta property="og:url" content="https://aaaalexqaq.github.io/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/index.html">
+<meta property="og:url" content="https://aaaalexqaq.github.io/2023/09/20/%E9%9D%A2%E7%BB%8F1/index.html">
 <meta property="og:site_name" content="alex">
 <meta property="og:description" content="面试经验2SpringBoot的主入口注解@SpringBootApplication 什么情况下使用responsebody，通常和谁结合使用@responsebody后返回结果不会被解析为跳转路径，而是直接写入HTTP response body中。比如异步获取json数据，加上@responsebody后，会直接返回json数据。 @RestController是@Controller和@R">
 <meta property="og:locale" content="zh_CN">
@@ -266,7 +266,17 @@
 <div class="trm-main-card-frame trm-sidebar">
     <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
     
-        <!-- card header -->
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont fas fa-user-alt"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont fas fa-th-list"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
 <div class="trm-mc-header">
     <div class="trm-avatar-frame trm-mb-20">
         <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
@@ -277,7 +287,7 @@
     
 </div>
 <!-- card header end -->
-        <!-- sidebar social -->
+                <!-- sidebar social -->
 
 <div class="trm-divider trm-mb-40 trm-mt-40"></div>
 <div class="trm-social">
@@ -293,7 +303,7 @@
 </div>
 
 <!-- sidebar social end -->
-        <!-- info -->
+                <!-- info -->
 <div class="trm-divider trm-mb-40 trm-mt-40"></div>
 <ul class="trm-table trm-mb-20">
     
@@ -318,7 +328,7 @@
 </ul>
 <!-- info end -->
 
-        
+                
     <div class="trm-divider trm-mb-40 trm-mt-40"></div>
     <!-- action button -->
     <div class="text-center">
@@ -329,6 +339,13 @@
     </div>
     <!-- action button end -->
 
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#面试经验2"  data-scroll-to="#面试经验2"><span class="toc-number">1.</span> <span class="toc-text">面试经验2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#SpringBoot的主入口注解"  data-scroll-to="#SpringBoot的主入口注解"><span class="toc-number">1.1.</span> <span class="toc-text">SpringBoot的主入口注解</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#什么情况下使用responsebody，通常和谁结合使用"  data-scroll-to="#什么情况下使用responsebody，通常和谁结合使用"><span class="toc-number">1.2.</span> <span class="toc-text">什么情况下使用responsebody，通常和谁结合使用</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#什么情况下，一个接口可以返回一个路径而不是字符串。包含什么注解的时候生效。"  data-scroll-to="#什么情况下，一个接口可以返回一个路径而不是字符串。包含什么注解的时候生效。"><span class="toc-number">1.3.</span> <span class="toc-text">什么情况下，一个接口可以返回一个路径而不是字符串。包含什么注解的时候生效。</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Maven打包的常用命令"  data-scroll-to="#Maven打包的常用命令"><span class="toc-number">1.4.</span> <span class="toc-text">Maven打包的常用命令</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#如何删除list表中的项"  data-scroll-to="#如何删除list表中的项"><span class="toc-number">1.5.</span> <span class="toc-text">如何删除list表中的项</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#如何使用Stream流进行分组"  data-scroll-to="#如何使用Stream流进行分组"><span class="toc-number">1.6.</span> <span class="toc-text">如何使用Stream流进行分组</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#常用IO流，说一下它们的英文"  data-scroll-to="#常用IO流，说一下它们的英文"><span class="toc-number">1.7.</span> <span class="toc-text">常用IO流，说一下它们的英文</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#反射是什么"  data-scroll-to="#反射是什么"><span class="toc-number">1.8.</span> <span class="toc-text">反射是什么</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#MySql中的事务"  data-scroll-to="#MySql中的事务"><span class="toc-number">1.9.</span> <span class="toc-text">MySql中的事务</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#mysql三范式"  data-scroll-to="#mysql三范式"><span class="toc-number">1.10.</span> <span class="toc-text">mysql三范式</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Spring的事务传播特性（属性）"  data-scroll-to="#Spring的事务传播特性（属性）"><span class="toc-number">1.11.</span> <span class="toc-text">Spring的事务传播特性（属性）</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#SpringBoot如何开启事务"  data-scroll-to="#SpringBoot如何开启事务"><span class="toc-number">1.12.</span> <span class="toc-text">SpringBoot如何开启事务</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#MySql中索引失效的场景"  data-scroll-to="#MySql中索引失效的场景"><span class="toc-number">1.13.</span> <span class="toc-text">MySql中索引失效的场景</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Linux命令获取所有Java相关的进程"  data-scroll-to="#Linux命令获取所有Java相关的进程"><span class="toc-number">1.14.</span> <span class="toc-text">Linux命令获取所有Java相关的进程</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#查看端口"  data-scroll-to="#查看端口"><span class="toc-number">1.15.</span> <span class="toc-text">查看端口</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Java8新特性，项目中哪里使用到了"  data-scroll-to="#Java8新特性，项目中哪里使用到了"><span class="toc-number">1.16.</span> <span class="toc-text">Java8新特性，项目中哪里使用到了</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#项目中有没有用lambda表达式"  data-scroll-to="#项目中有没有用lambda表达式"><span class="toc-number">1.17.</span> <span class="toc-text">项目中有没有用lambda表达式</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#springboot如何在启动时运行一个方法"  data-scroll-to="#springboot如何在启动时运行一个方法"><span class="toc-number">1.18.</span> <span class="toc-text">springboot如何在启动时运行一个方法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#JAVA中DATA和字符串互换"  data-scroll-to="#JAVA中DATA和字符串互换"><span class="toc-number">1.19.</span> <span class="toc-text">JAVA中DATA和字符串互换</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#int-数组转List的方法"  data-scroll-to="#int-数组转List的方法"><span class="toc-number">1.20.</span> <span class="toc-text">int[]数组转List的方法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#List转int-数组的方法"  data-scroll-to="#List转int-数组的方法"><span class="toc-number">1.21.</span> <span class="toc-text">List转int[]数组的方法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Arrays-asList有什么限制"  data-scroll-to="#Arrays-asList有什么限制"><span class="toc-number">1.22.</span> <span class="toc-text">Arrays.asList有什么限制</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#springboot的starter是怎么自动整合到配置中的"  data-scroll-to="#springboot的starter是怎么自动整合到配置中的"><span class="toc-number">1.23.</span> <span class="toc-text">springboot的starter是怎么自动整合到配置中的</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#springboot自动配置"  data-scroll-to="#springboot自动配置"><span class="toc-number">1.24.</span> <span class="toc-text">springboot自动配置</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#stream流怎么进行集合转为map"  data-scroll-to="#stream流怎么进行集合转为map"><span class="toc-number">1.25.</span> <span class="toc-text">stream流怎么进行集合转为map</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#redis常用的命令"  data-scroll-to="#redis常用的命令"><span class="toc-number">1.26.</span> <span class="toc-text">redis常用的命令</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#redis在项目中如何使用"  data-scroll-to="#redis在项目中如何使用"><span class="toc-number">1.27.</span> <span class="toc-text">redis在项目中如何使用</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#stream流中Collector-toMap方法与groupby的区别"  data-scroll-to="#stream流中Collector-toMap方法与groupby的区别"><span class="toc-number">1.28.</span> <span class="toc-text">stream流中Collector.toMap方法与groupby的区别</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#zset"  data-scroll-to="#zset"><span class="toc-number">1.29.</span> <span class="toc-text">zset</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#深拷贝-vs-浅拷贝"  data-scroll-to="#深拷贝-vs-浅拷贝"><span class="toc-number">1.30.</span> <span class="toc-text">深拷贝 vs 浅拷贝</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#vim中怎么进行撤销"  data-scroll-to="#vim中怎么进行撤销"><span class="toc-number">1.31.</span> <span class="toc-text">vim中怎么进行撤销</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#vim怎么进行保存"  data-scroll-to="#vim怎么进行保存"><span class="toc-number">1.32.</span> <span class="toc-text">vim怎么进行保存</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Linux查看日志文件"  data-scroll-to="#Linux查看日志文件"><span class="toc-number">1.33.</span> <span class="toc-text">Linux查看日志文件</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Linux运行jar包时，如何把日志打印到某一个文件中"  data-scroll-to="#Linux运行jar包时，如何把日志打印到某一个文件中"><span class="toc-number">1.34.</span> <span class="toc-text">Linux运行jar包时，如何把日志打印到某一个文件中</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#两个Integer怎么判断是否相等，Integer与Int判断相等"  data-scroll-to="#两个Integer怎么判断是否相等，Integer与Int判断相等"><span class="toc-number">1.35.</span> <span class="toc-text">两个Integer怎么判断是否相等，Integer与Int判断相等</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#缓存穿透"  data-scroll-to="#缓存穿透"><span class="toc-number">1.36.</span> <span class="toc-text">缓存穿透</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#缓存击穿"  data-scroll-to="#缓存击穿"><span class="toc-number">1.37.</span> <span class="toc-text">缓存击穿</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#什么是jvm？"  data-scroll-to="#什么是jvm？"><span class="toc-number">1.38.</span> <span class="toc-text">什么是jvm？</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#什么情况下GC"  data-scroll-to="#什么情况下GC"><span class="toc-number">1.39.</span> <span class="toc-text">什么情况下GC</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#使用拦截器进行登录校验怎么做的"  data-scroll-to="#使用拦截器进行登录校验怎么做的"><span class="toc-number">1.40.</span> <span class="toc-text">使用拦截器进行登录校验怎么做的</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#用户在一台电脑上登录后，在其他电脑上使用相同的用户登录会是什么情况，怎么处理"  data-scroll-to="#用户在一台电脑上登录后，在其他电脑上使用相同的用户登录会是什么情况，怎么处理"><span class="toc-number">1.41.</span> <span class="toc-text">用户在一台电脑上登录后，在其他电脑上使用相同的用户登录会是什么情况，怎么处理</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#什么是数据清洗，怎么做的"  data-scroll-to="#什么是数据清洗，怎么做的"><span class="toc-number">1.42.</span> <span class="toc-text">什么是数据清洗，怎么做的</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Spring和springboot的区别"  data-scroll-to="#Spring和springboot的区别"><span class="toc-number">1.43.</span> <span class="toc-text">Spring和springboot的区别</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#单线程和线程池在业务层面的应用"  data-scroll-to="#单线程和线程池在业务层面的应用"><span class="toc-number">1.44.</span> <span class="toc-text">单线程和线程池在业务层面的应用</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#介绍一下jdk，jre，jvm"  data-scroll-to="#介绍一下jdk，jre，jvm"><span class="toc-number">1.45.</span> <span class="toc-text">介绍一下jdk，jre，jvm</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#安装java都安装了什么Jvm的类加载器"  data-scroll-to="#安装java都安装了什么Jvm的类加载器"><span class="toc-number">1.46.</span> <span class="toc-text">安装java都安装了什么Jvm的类加载器</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#什么是DCHP"  data-scroll-to="#什么是DCHP"><span class="toc-number">1.47.</span> <span class="toc-text">什么是DCHP</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#TCP和UDP的区别"  data-scroll-to="#TCP和UDP的区别"><span class="toc-number">1.48.</span> <span class="toc-text">TCP和UDP的区别</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#接口和抽象类的区别"  data-scroll-to="#接口和抽象类的区别"><span class="toc-number">1.49.</span> <span class="toc-text">接口和抽象类的区别</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#说说你对Java内存模型（JMM）的理解，为什么要用JMM"  data-scroll-to="#说说你对Java内存模型（JMM）的理解，为什么要用JMM"><span class="toc-number">1.50.</span> <span class="toc-text">说说你对Java内存模型（JMM）的理解，为什么要用JMM</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
     
     </div>
 </div>
@@ -388,8 +405,8 @@
 
 <p>更简洁，高效。</p>
 <h2 id="如何使用Stream流进行分组"><a href="#如何使用Stream流进行分组" class="headerlink" title="如何使用Stream流进行分组"></a>如何使用Stream流进行分组</h2><p>Stream流-分组操作<br>方法1– groupingBy(Function)<br>方法2– groupingBy(Function,Collector)<br>方法3– groupingBy(Function,Supplier,Collector)</p>
-<h2 id="常用IO流，说一下它们的英文"><a href="#常用IO流，说一下它们的英文" class="headerlink" title="常用IO流，说一下它们的英文"></a>常用IO流，说一下它们的英文</h2><p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/1694616340225.png" alt="1694616340225" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/1694616358892.png" alt="1694616358892" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="常用IO流，说一下它们的英文"><a href="#常用IO流，说一下它们的英文" class="headerlink" title="常用IO流，说一下它们的英文"></a>常用IO流，说一下它们的英文</h2><p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/1694616340225.png" alt="1694616340225" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/1694616358892.png" alt="1694616358892" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <h2 id="反射是什么"><a href="#反射是什么" class="headerlink" title="反射是什么"></a>反射是什么</h2><p> 在Java中的反射机制是指在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法；并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为Java语言的反射机制</p>
 <h2 id="MySql中的事务"><a href="#MySql中的事务" class="headerlink" title="MySql中的事务"></a>MySql中的事务</h2><p> 事务四个基本特征或 ACID 特性。</p>
 <p>ACID，是指数据库管理系统（DBMS）在写入或更新资料的过程中，为保证事务（transaction）是正确可靠的，所必须具备的四个特性：原子性（atomicity，或称不可分割性）、一致性（consistency）、隔离性（isolation，又称独立性）、持久性（durability）。</p>
@@ -650,18 +667,18 @@
 <p>将日志输出到<strong>log.file</strong>指定的文件内。</p>
 <h2 id="两个Integer怎么判断是否相等，Integer与Int判断相等"><a href="#两个Integer怎么判断是否相等，Integer与Int判断相等" class="headerlink" title="两个Integer怎么判断是否相等，Integer与Int判断相等"></a>两个Integer怎么判断是否相等，Integer与Int判断相等</h2><p><strong>关于&#x3D;&#x3D;（双等号）比较</strong><br>——对于基本数据类型，（双等号）比较的是值，而对于包装类型，（双等号）比较的则是2个对象的内存地址。<br>——-如果包装类和基本类型比较时，将包装类拆箱后，再进行基本类型的值比较。<br><strong>关于equals</strong><br>——两个包装类比较时，是比较的是包装类型的基本类型的值<br>——包装类和基本类型比较时，基本类型自动装箱后，再比较基本类型的值。<br>————–equal是方法比较的是真正的值。</p>
 <h2 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h2><p>缓存穿透是指缓存和数据库中都没有的数据，而用户不断发起请求，如发起为id为“-1”的数据或id为特别大不存在的数据。这时的用户很可能是攻击者，攻击会导致数据库压力过大。</p>
-<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/68bbd3a986614d00b70756a46a259c91.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/68bbd3a986614d00b70756a46a259c91.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>解决方案：</p>
 <p>接口层增加校验，如用户鉴权校验，id做基础校验，id&lt;&#x3D;0的直接拦截；<br>从缓存取不到的数据，在数据库中也没有取到，这时也可以将key-value对写为key-null，缓存有效时间可以设置短一些，如30秒（设置太长会导致正常情况也没法使用）。这样可以防止攻击用户反复用同一个id暴力攻击<br>使用布隆过滤器，需要安装redis组件<br>使用布谷鸟滤器，布谷鸟过滤器是布隆过滤器的升级版，需要安装redis组件<br>在客户端自行实现布隆过滤算法；</p>
 <h2 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h2><p>缓存击穿指的是大量的key在同一时间过期，但是又有大量的请求需要用到这些已经过期的key，那么程序在redis找不到数据，就会去数据库里查询，数据库处理大量的请求的同时导致压力瞬间增大，造成压力过大，甚至导致崩溃；</p>
-<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/3633ec8aae3e443e847131bfd1585c35.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/3633ec8aae3e443e847131bfd1585c35.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>解决方案</p>
 <p>设置key值永不过期<br>将key的过期时间设为随机<br>使用布隆过滤器或者布谷鸟过滤器<br>使用分布式锁，当多个key过期时，同一时间只有一个查询请求下发到数据库，其他的key等待一个个地轮流查，就可以避免数据库压力过大的问题；</p>
-<h2 id="什么是jvm？"><a href="#什么是jvm？" class="headerlink" title="什么是jvm？"></a>什么是jvm？</h2><p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/java-runtime-data-areas-jdk1.8.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/stack-area.png" alt="Java 虚拟机栈" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/local-variables-table.png" alt="局部变量表" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/1694673907900.png" alt="1694673907900" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="/2023/09/20/%E9%BC%8E%E5%A4%8F%E9%9D%A2%E7%BB%8F/1694673921181.png" alt="1694673921181" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="什么是jvm？"><a href="#什么是jvm？" class="headerlink" title="什么是jvm？"></a>什么是jvm？</h2><p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/java-runtime-data-areas-jdk1.8.png" alt="img" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/stack-area.png" alt="Java 虚拟机栈" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/local-variables-table.png" alt="局部变量表" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/1694673907900.png" alt="1694673907900" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/2023/09/20/%E9%9D%A2%E7%BB%8F1/1694673921181.png" alt="1694673921181" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p><strong>G1 收集器在后台维护了一个优先列表，每次根据允许的收集时间，优先选择回收价值最大的 Region(这也就是它的名字 Garbage-First 的由来)</strong> 。这种使用 Region 划分内存空间以及有优先级的区域回收方式，保证了 G1 收集器在有限时间内可以尽可能高的收集效率（把内存化整为零）。</p>
 <p><strong>从 JDK9 开始，G1 垃圾收集器成为了默认的垃圾收集器。</strong></p>
 <h2 id="什么情况下GC"><a href="#什么情况下GC" class="headerlink" title="什么情况下GC"></a>什么情况下GC</h2><p>GC又分为 minor GC 和 Full GC (也称为 Major GC )</p>
@@ -737,7 +754,7 @@
     
         <div class="col-lg-6">
     <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
-        <a href="/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/" class="trm-cover-frame trm-anima-link">
+        <a href="/2023/09/13/%E9%9D%A2%E7%BB%8F/" class="trm-cover-frame trm-anima-link">
             
             
                 <img alt="cover" class="no-fancybox" src="/img/block.jpg">
@@ -751,7 +768,7 @@
                 </a>
             </div>
             <h5>
-                <a href="/2023/09/13/%E5%9B%BD%E5%AD%90%E9%9D%A2%E7%BB%8F/" class="trm-anima-link">
+                <a href="/2023/09/13/%E9%9D%A2%E7%BB%8F/" class="trm-anima-link">
                     面试经验
                 </a>
             </h5>
